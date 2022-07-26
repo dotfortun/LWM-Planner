@@ -326,10 +326,13 @@ class Location(db.Model):
         return '<Location {}>'.format(self.name)
 
     def serialize(self):
+        parent = None
+        if self.parent:
+            parent = self.parent.name
         return {
             "name": self.name,
             "description": self.description,
-            "parent": self.parent.name,
+            "parent": parent,
         }
 
 

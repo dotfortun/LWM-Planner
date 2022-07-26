@@ -25,10 +25,15 @@ def get_pilot(id):
         pilot=Pilot.query.filter_by(id=id).first().serialize()
     )
 
-
 @api.route("/missions/<int:id>", methods=['GET'])
 def get_mission(id):
     return jsonify(
-        pilot=Mission.query.filter_by(id=id).first().serialize()
+        mission=Mission.query.filter_by(id=id).first().serialize()
+    )
+
+@api.route("/locations", methods=['GET'])
+def get_locations():
+    return jsonify(
+        locations=[x.serialize() for x in Location.query.all()]
     )
 
