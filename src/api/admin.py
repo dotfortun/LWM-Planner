@@ -21,7 +21,16 @@ class PilotView(ModelView):
         'name',
         'callsign',
         'manna',
-        'gear',
+        'mission_history',
+    ]
+
+
+class LocationView(ModelView):
+    column_list = [
+        'name',
+        'description',
+        'child_locations',
+        'mission_history',
     ]
 
 
@@ -65,7 +74,7 @@ def setup_admin(app):
     admin.add_view(ModelView(Gear, db.session))
     admin.add_view(MissionView(Mission, db.session))
     admin.add_view(MissionStateView(MissionState, db.session))
-    admin.add_view(ModelView(Location, db.session))
+    admin.add_view(LocationView(Location, db.session))
 
     # You can duplicate that line to add mew models
     # admin.add_view(ModelView(YourModelName, db.session))

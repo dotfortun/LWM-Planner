@@ -228,6 +228,7 @@ mission_to_loot = db.Table(
 class Mission(db.Model):
     __tablename__ = "mission"
     id = db.Column(db.Integer, primary_key=True)
+    gm_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     name = db.Column(db.String(120), nullable=True)
     description = db.Column(db.Text, nullable=True)
     difficulty = db.Column(db.Integer, default=1)
@@ -257,6 +258,10 @@ class Mission(db.Model):
     )
     mission_state = db.relationship(
         "MissionState",
+        uselist=False
+    )
+    gm = db.relationship(
+        "User",
         uselist=False
     )
 
@@ -308,6 +313,13 @@ class Location(db.Model):
         primaryjoin=(id == location_tree.c.parent),
         secondaryjoin=(id == location_tree.c.child),
         uselist=True
+    )
+    parent = db.relationship(
+        "Location",
+        secondary=location_tree,
+        primaryjoin=(id == location_tree.c.child),
+        secondaryjoin=(id == location_tree.c.parent),
+        uselist=False
     )
 
     def __repr__(self):
