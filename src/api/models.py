@@ -122,7 +122,21 @@ class Pilot(db.Model):
             )
         ]
 
-    def serialize(self):
+    def serialize(self, no_recurse=False):
+        if no_recurse:
+            return {
+                "id": self.id,
+                "name": self.name,
+                "callsign": self.callsign,
+                "hase": {
+                    "hull": self.hull,
+                    "agility": self.agility,
+                    "systems": self.systems,
+                    "engineering": self.engineering,
+                },
+                "grit": self.grit,
+                "manna": self.manna,
+            }
         return {
             "id": self.id,
             "name": self.name,
@@ -184,9 +198,12 @@ class Transaction(db.Model):
 
     def serialize(self):
         return {
-            "item": self.item.serialize(),
+            "item": {
+                "name": self.item.name,
+                "id": self.item.id,
+            },
             "cost": self.cost,
-            "pilot": self.pilot.serialize(),
+            "pilot": self.pilot.serialize(no_recurse=True),
             "is_refunded": self.is_refunded,
         }
 
@@ -250,10 +267,10 @@ class Mission(db.Model):
             "is_job": self.is_job,
             "scheduled_date": self.schedule,
             "pilots": [
-                x.serialize() for x in self.pilots
+                x.serialize(no_recurse=True) for x in self.pilots
             ],
             "loot": [
-                x.serialize for x in self.loot
+                x.serialize() for x in self.loot
             ],
             "location": self.location.serialize(),
             "mission_state": {
@@ -268,6 +285,9 @@ class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=True)
     description = db.Column(db.Text, nullable=True)
+
+    def __repr__(self):
+        return '<Location {}>'.format(self.name)
 
     def serialize(self):
         return {
