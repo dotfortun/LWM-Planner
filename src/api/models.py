@@ -328,7 +328,8 @@ class Location(db.Model):
     def serialize(self):
         return {
             "name": self.name,
-            "description": self.description
+            "description": self.description,
+            "parent": self.parent.name,
         }
 
 

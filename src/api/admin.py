@@ -38,6 +38,7 @@ class MissionView(ModelView):
     column_list = [
         'id',
         'name',
+        'gm',
         'description',
         'difficulty',
         'is_job',
