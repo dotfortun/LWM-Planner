@@ -24,8 +24,25 @@ class PilotView(ModelView):
         'gear',
     ]
 
+
+class MissionView(ModelView):
+    column_list = [
+        'id',
+        'name',
+        'description',
+        'difficulty',
+        'is_job',
+        'schedule',
+        'state',
+        'location',
+        'loot',
+        'pilots',
+    ]
+
+
 class MissionStateView(ModelView):
     column_list = [
+        'id',
         'name',
         'value',
         'valid_state_changes',
@@ -46,7 +63,7 @@ def setup_admin(app):
     admin.add_view(PilotView(Pilot, db.session))
     admin.add_view(ModelView(Transaction, db.session))
     admin.add_view(ModelView(Gear, db.session))
-    admin.add_view(ModelView(Mission, db.session))
+    admin.add_view(MissionView(Mission, db.session))
     admin.add_view(MissionStateView(MissionState, db.session))
     admin.add_view(ModelView(Location, db.session))
 

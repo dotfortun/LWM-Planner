@@ -108,10 +108,8 @@ class Pilot(db.Model):
 
     @property
     def grit(self):
-        return sum(
-                [self.hull, self.agility,
-                self.systems, self.engineering]
-            ) // 2
+        return sum([self.hull, self.agility,
+            self.systems, self.engineering]) // 2
 
     @property
     def gear(self):
@@ -283,11 +281,34 @@ class Mission(db.Model):
         }
 
 
+location_tree = db.Table(
+    "location_tree",
+    db.metadata,
+    db.Column(
+        "parent",
+        db.Integer,
+        db.ForeignKey('location.id')
+    ),
+    db.Column(
+        "child",
+        db.Integer,
+        db.ForeignKey('location.id')
+    ),
+)
+
+
 class Location(db.Model):
     __tablename__ = "location"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=True)
     description = db.Column(db.Text, nullable=True)
+    child_locations = db.relationship(
+        "Location",
+        secondary=location_tree,
+        primaryjoin=(id == location_tree.c.parent),
+        secondaryjoin=(id == location_tree.c.child),
+        uselist=True
+    )
 
     def __repr__(self):
         return '<Location {}>'.format(self.name)

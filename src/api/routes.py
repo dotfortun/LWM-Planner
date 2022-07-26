@@ -18,3 +18,17 @@ def get_users():
             user.serialize() for user in User.query.all()
         ]
     )
+
+@api.route("/pilots/<int:id>", methods=['GET'])
+def get_pilot(id):
+    return jsonify(
+        pilot=Pilot.query.filter_by(id=id).first().serialize()
+    )
+
+
+@api.route("/missions/<int:id>", methods=['GET'])
+def get_mission(id):
+    return jsonify(
+        pilot=Mission.query.filter_by(id=id).first().serialize()
+    )
+
