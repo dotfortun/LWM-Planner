@@ -20,6 +20,12 @@ def get_users():
         ]
     )
 
+@api.route("/users/<int:id>", methods=['GET'])
+def get_user(id):
+    return jsonify(
+        pilot=User.query.filter_by(id=id).first().serialize()
+    )
+
 @api.route("/users", methods=['POST'])
 def post_users():
     """
@@ -75,7 +81,19 @@ def get_mission(id):
         mission=Mission.query.filter_by(id=id).first().serialize()
     )
 
+@api.route("/missions", methods=['POST'])
+def post_mission():
+    return jsonify(
+        pilot=Mission.query.filter_by(id=id).first().serialize()
+    )
+
 # Locations
+
+@api.route("/locations", methods=['GET'])
+def get_locations():
+    return jsonify(
+        locations=[x.serialize() for x in Location.query.all()]
+    )
 
 @api.route("/locations/<int:id>", methods=['GET'])
 def get_location(id):
@@ -83,9 +101,9 @@ def get_location(id):
         mission=Location.query.filter_by(id=id).first().serialize()
     )
 
-@api.route("/locations", methods=['GET'])
-def get_locations():
+@api.route("/locations", methods=['POST'])
+def post_location():
     return jsonify(
-        locations=[x.serialize() for x in Location.query.all()]
+        pilot=Location.query.filter_by(id=id).first().serialize()
     )
 
