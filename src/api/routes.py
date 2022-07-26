@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 
 from api.models import (
     db, User, Pilot, Transaction, Gear,
@@ -52,6 +52,21 @@ def post_users():
     db.session.commit()
     return jsonify(msg="User created successfully."), 200
 
+
+@api.route('/login', methods=['POST'])
+def login():
+    """
+    {
+        "email": <str: email>,
+        "password": <str: password>
+    }
+    """
+    user = User.query.filter_by(request.json.get("email", "")).first()
+    if user:
+        if user.check_password_hash(request.json.get("password", "")):
+            return jsonify(token=create_access_token(identity=user.id)), 200
+    return jsonify(msg="Failed to authenticate"), 400
+
 # Pilots
 
 
@@ -79,9 +94,13 @@ def post_pilot():
     }
     """
     user = User.query.filter_by(id=get_jwt_identity()).first()
-    return jsonify(
-        pilot=Pilot.query.filter_by(id=id).first().serialize()
-    )
+    user.pilots.append(Pilot(
+        name=request.json.get("name", None),
+        callsign=request.json.get("callsign", None)
+    ))
+    db.session.merge(user)
+    db.session.commit()
+    return jsonify(msg="Success."), 200
 
 # Missions
 
