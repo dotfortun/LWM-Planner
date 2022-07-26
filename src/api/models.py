@@ -170,10 +170,16 @@ class Gear(db.Model):
     def __repr__(self):
         return '<Gear {}>'.format(self.name)
 
-    def serialize(self):
+    def serialize(self, desc=True):
+        if desc:
+            return {
+                "id": self.id,
+                "name": self.name,
+                "description": self.description
+            }
         return {
-            "name": self.name,
-            "description": self.description
+            "id": self.id,
+            "name": self.name
         }
     
 
@@ -198,10 +204,7 @@ class Transaction(db.Model):
 
     def serialize(self):
         return {
-            "item": {
-                "name": self.item.name,
-                "id": self.item.id,
-            },
+            "item": self.item.serialize(desc=False),
             "cost": self.cost,
             "pilot": self.pilot.serialize(no_recurse=True),
             "is_refunded": self.is_refunded,
@@ -270,7 +273,7 @@ class Mission(db.Model):
                 x.serialize(no_recurse=True) for x in self.pilots
             ],
             "loot": [
-                x.serialize() for x in self.loot
+                x.serialize(desc=False) for x in self.loot
             ],
             "location": self.location.serialize(),
             "mission_state": {
