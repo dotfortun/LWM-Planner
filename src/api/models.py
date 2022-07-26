@@ -32,12 +32,6 @@ class User(db.Model):
         nullable=False,
         default=True
     )
-    pilots = db.relationship(
-        "Pilot",
-        secondary=user_to_pilot,
-        primaryjoin=(id == user_to_pilot.c.user_id),
-        uselist=True
-    )
 
     def __repr__(self):
         return '<User {}>'.format(self.email)
@@ -86,21 +80,19 @@ class Pilot(db.Model):
     systems = db.Column(db.Integer, default=0)
     engineering = db.Column(db.Integer, default=0)
     manna = db.Column(db.Integer, default=1000)
-    user = db.relationship(
-        "User",
-        secondary=user_to_pilot,
-        primaryjoin=(id == user_to_pilot.c.pilot_id),
-        uselist=False
-    )
-    transactions = db.relationship(
-        "Transaction",
-        uselist=True
-    )
     missions = db.relationship(
         "Mission",
         secondary=pilot_to_mission,
         primaryjoin=(id == pilot_to_mission.c.pilot_id),
-        uselist=True
+        uselist=True,
+        backref="pilots"
+    )
+    user = db.relationship(
+        "User",
+        secondary=user_to_pilot,
+        primaryjoin=(id == user_to_pilot.c.pilot_id),
+        uselist=False,
+        backref="pilots"
     )
 
     def __repr__(self):
@@ -194,7 +186,8 @@ class Transaction(db.Model):
     )
     pilot = db.relationship(
         "Pilot",
-        uselist=False
+        uselist=False,
+        backref="transactions"
     )
     
     def __repr__(self):
@@ -238,12 +231,6 @@ class Mission(db.Model):
     location_id = db.Column(
         db.Integer,
         db.ForeignKey("location.id")
-    )
-    pilots = db.relationship(
-        "Pilot",
-        secondary=pilot_to_mission,
-        primaryjoin=(id == pilot_to_mission.c.mission_id),
-        uselist=True
     )
     loot = db.relationship(
         "Gear",
@@ -312,7 +299,8 @@ class Location(db.Model):
         secondary=location_tree,
         primaryjoin=(id == location_tree.c.parent),
         secondaryjoin=(id == location_tree.c.child),
-        uselist=True
+        uselist=True,
+        viewonly=True
     )
     parent = db.relationship(
         "Location",
