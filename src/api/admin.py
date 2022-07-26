@@ -6,7 +6,7 @@ from .models import (
     Mission, Location, MissionState
 )
 from flask_admin.contrib.sqla import ModelView
-from wtforms.fields import PasswordField
+from wtforms.fields import PasswordField, DateTimeField
 
 class UserView(ModelView):
     column_list = ['email', 'is_active', 'pilots']
@@ -42,12 +42,14 @@ class MissionView(ModelView):
         'description',
         'difficulty',
         'is_job',
-        'schedule',
         'state',
         'location',
         'loot',
         'pilots',
     ]
+    form_extra_fields = {
+        'schedule': DateTimeField('schedule')
+    }
 
 
 class MissionStateView(ModelView):
