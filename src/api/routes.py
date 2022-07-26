@@ -2,6 +2,8 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
+from flask_jwt_extended import jwt_required
+
 from api.models import (
     db, User, Pilot, Transaction, Gear,
     Mission, Location, MissionState
@@ -61,8 +63,14 @@ def get_pilot(id):
         pilot=Pilot.query.filter_by(id=id).first().serialize()
     )
 
+@jwt_required()
 @api.route("/pilots", methods=['POST'])
 def post_pilot():
+    """
+    {
+
+    }
+    """
     return jsonify(
         pilot=Pilot.query.filter_by(id=id).first().serialize()
     )
@@ -81,6 +89,7 @@ def get_mission(id):
         mission=Mission.query.filter_by(id=id).first().serialize()
     )
 
+@jwt_required()
 @api.route("/missions", methods=['POST'])
 def post_mission():
     return jsonify(
@@ -101,6 +110,7 @@ def get_location(id):
         mission=Location.query.filter_by(id=id).first().serialize()
     )
 
+@jwt_required()
 @api.route("/locations", methods=['POST'])
 def post_location():
     return jsonify(
