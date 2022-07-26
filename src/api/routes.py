@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from api.models import (
     db, User, Pilot, Transaction, Gear,
@@ -14,6 +14,7 @@ api = Blueprint('api', __name__)
 
 # Users
 
+
 @api.route("/users", methods=['GET'])
 def get_users():
     return jsonify(
@@ -22,11 +23,13 @@ def get_users():
         ]
     )
 
+
 @api.route("/users/<int:id>", methods=['GET'])
 def get_user(id):
     return jsonify(
         pilot=User.query.filter_by(id=id).first().serialize()
     )
+
 
 @api.route("/users", methods=['POST'])
 def post_users():
@@ -51,11 +54,13 @@ def post_users():
 
 # Pilots
 
+
 @api.route("/pilots", methods=['GET'])
 def get_pilots():
     return jsonify(
         pilots=[x.serialize() for x in Pilot.query.all()]
     )
+
 
 @api.route("/pilots/<int:id>", methods=['GET'])
 def get_pilot(id):
@@ -63,19 +68,23 @@ def get_pilot(id):
         pilot=Pilot.query.filter_by(id=id).first().serialize()
     )
 
+
 @jwt_required()
 @api.route("/pilots", methods=['POST'])
 def post_pilot():
     """
     {
-
+        "name": <str: name>,
+        "callsign": <str: callsign>
     }
     """
+    user = User.query.filter_by(id=get_jwt_identity()).first()
     return jsonify(
         pilot=Pilot.query.filter_by(id=id).first().serialize()
     )
 
 # Missions
+
 
 @api.route("/missions", methods=['GET'])
 def get_missions():
@@ -83,11 +92,13 @@ def get_missions():
         missiosn=[x.serialize() for x in Mission.query.all()]
     )
 
+
 @api.route("/missions/<int:id>", methods=['GET'])
 def get_mission(id):
     return jsonify(
         mission=Mission.query.filter_by(id=id).first().serialize()
     )
+
 
 @jwt_required()
 @api.route("/missions", methods=['POST'])
@@ -98,11 +109,13 @@ def post_mission():
 
 # Locations
 
+
 @api.route("/locations", methods=['GET'])
 def get_locations():
     return jsonify(
         locations=[x.serialize() for x in Location.query.all()]
     )
+
 
 @api.route("/locations/<int:id>", methods=['GET'])
 def get_location(id):
@@ -110,10 +123,10 @@ def get_location(id):
         mission=Location.query.filter_by(id=id).first().serialize()
     )
 
+
 @jwt_required()
 @api.route("/locations", methods=['POST'])
 def post_location():
     return jsonify(
         pilot=Location.query.filter_by(id=id).first().serialize()
     )
-

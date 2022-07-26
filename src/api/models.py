@@ -21,6 +21,7 @@ user_to_pilot = db.Table(
     ),
 )
 
+
 class User(db.Model):
     __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True)
@@ -42,7 +43,7 @@ class User(db.Model):
             "email": self.email,
             "pilots": [pilot.serialize() for pilot in self.pilots]
         }
-    
+
     @hybrid_property
     def password(self):
         return self._password
@@ -69,6 +70,7 @@ pilot_to_mission = db.Table(
         db.ForeignKey('mission.id')
     ),
 )
+
 
 class Pilot(db.Model):
     __tablename__ = "pilot"
@@ -101,7 +103,7 @@ class Pilot(db.Model):
     @property
     def grit(self):
         return sum([self.hull, self.agility,
-            self.systems, self.engineering]) // 2
+                    self.systems, self.engineering]) // 2
 
     @property
     def gear(self):
@@ -171,7 +173,7 @@ class Gear(db.Model):
             "id": self.id,
             "name": self.name
         }
-    
+
 
 class Transaction(db.Model):
     __tablename__ = "transaction"
@@ -189,7 +191,7 @@ class Transaction(db.Model):
         uselist=False,
         backref="transactions"
     )
-    
+
     def __repr__(self):
         return '<Transaction {}>'.format(self.id)
 
@@ -227,7 +229,8 @@ class Mission(db.Model):
     difficulty = db.Column(db.Integer, default=1)
     is_job = db.Column(db.Boolean, default=True)
     schedule = db.Column(db.DateTime, default=datetime.now())
-    state_id = db.Column(db.Integer, db.ForeignKey("mission_state.id"), nullable=True)
+    state_id = db.Column(db.Integer, db.ForeignKey(
+        "mission_state.id"), nullable=True)
     location_id = db.Column(
         db.Integer,
         db.ForeignKey("location.id")
@@ -345,23 +348,32 @@ class MissionState(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     value = db.Column(db.String(120), nullable=True, unique=True)
     name = db.Column(db.String(120), nullable=True)
-    valid_state_changes = db.relationship(
+    prev = db.relationship(
         "MissionState",
         secondary=mission_state_changes,
-        primaryjoin=(id == mission_state_changes.c.current_state),
-        secondaryjoin=(id == mission_state_changes.c.next_state),
-        uselist=True
+        primaryjoin=(id == mission_state_changes.c.next_state),
+        secondaryjoin=(id == mission_state_changes.c.current_state),
+        uselist=False,
+        backref="valid_state_changes"
     )
-    
+
     def __repr__(self):
         return '<MissionState {}>'.format(self.value)
 
-    def serialize(self):
+    def serialize(self, prev=False):
+        if not prev:
+            return {
+                "value": self.value,
+                "name": self.name,
+                "next": [
+                    x.serialize() for x in self.valid_state_changes
+                ],
+            }
+        prev = None
+        if self.prev:
+            prev = self.prev.name
         return {
             "value": self.value,
             "name": self.name,
-            "next": [
-                x.serialize() for x in self.valid_state_changes
-            ],
+            "prev": prev,
         }
-

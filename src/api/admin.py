@@ -1,4 +1,4 @@
-  
+
 import os
 from flask_admin import Admin
 from .models import (
@@ -8,13 +8,15 @@ from .models import (
 from flask_admin.contrib.sqla import ModelView
 from wtforms.fields import PasswordField, DateTimeField
 
+
 class UserView(ModelView):
     column_list = ['email', 'is_active', 'pilots']
-    column_editable_list = ['is_active',]
+    column_editable_list = ['is_active', ]
     column_exclude_list = ['_password', ]
     form_extra_fields = {
         'password': PasswordField('password')
     }
+
 
 class PilotView(ModelView):
     column_list = [
@@ -64,12 +66,12 @@ class MissionStateView(ModelView):
         'value',
     ]
 
+
 def setup_admin(app):
     app.secret_key = os.environ.get('FLASK_APP_KEY', 'sample key')
     app.config['FLASK_ADMIN_SWATCH'] = 'slate'
     admin = Admin(app, name='LWM Planner Admin', template_mode='bootstrap3')
 
-    
     # Add your models here, for example this is how we add a the User model to the admin
     admin.add_view(UserView(User, db.session))
     admin.add_view(PilotView(Pilot, db.session))

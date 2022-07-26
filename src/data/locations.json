@@ -1,0 +1,67 @@
+[
+    {
+        "name": "Yomi Gate",
+        "description": "",
+        "parent": "Izanagi"
+    },
+    {
+        "name": "Izanami",
+        "description": "The star system on the far side of Yomi Gate",
+        "parent": null
+    },
+    {
+        "name": "Izanami I",
+        "description": "A rocky planet on a highly elliptical orbit around Izanami.",
+        "parent": "Izanami"
+    },
+    {
+        "name": "Izanagi",
+        "description": "The planetoid that Yomi Gate and the GSV Ominous Doorstop orbit.  It has a surprisingly smooth icy surface.",
+        "parent": "HIP 67852"
+    },
+    {
+        "name": "GSV Ominous Doorstop",
+        "description": "The GSV Ominous Doorstop is a research colony aboard a decommissioned warship.  The Ominous Doorstop is maintained by it's NHP, Scheherazade, with individual sectors being governed by subminds.",
+        "parent": "Izanagi"
+    },
+    {
+        "name": "HIP 67852",
+        "description": "This subgiant star is too far outside Union, Aun, and KTB space for any of the powers to claim, and so the system has been declared to be neutral territory, and is free of any official presence by the major players.  The system is thankfully relatively close to a blink gate, so travel time to and from the gate is measures in months, not years.",
+        "parent": null
+    },
+    {
+        "name": "Izanami II",
+        "description": "A planet with an atmosphere if mostly CO2, it's a sauna down there.\r\n\r\n<ul>\r\n<li>1.35 AU</li>\r\n<li>0.9 g</li>\r\n</ul>\r\n\r\nAll Heat inflicted (to the user or others) by systems or weapons is increased by +1.\r\n\r\nThe dense atmosphere of this world eats through armor. All weapons gain AP.",
+        "parent": "Izanami"
+    },
+    {
+        "name": "Izanami III",
+        "description": "A relatively Earthlike planet, about 70% surface water, a wide variety of biomes, and a pair of moons.\r\n\r\n<ul>\r\n<li>1.7 AU</li>\r\n<li>1.25 g</li>\r\n</ul>\r\n\r\nAn unusually large proportion of this planet\u2019s animal or plant life is dangerous; some of the flora and fauna may predatory, particularly hostile, or even titanic in size. Use the Monstrosity NPC type to generate encounters with wildlife. Hostile flora can appear on the battlefield as immobile characters with Size 1\u20132, 5 HP, and Evasion 10; targets that move adjacent to them must succeed on a Hull save or take 3 Kinetic Damage and become Immobilized until the flora is destroyed, as it traps them with sticky sap, webbing, a pit, or the like.",
+        "parent": "Izanami"
+    },
+    {
+        "name": "Izanami IV",
+        "description": "Another borderline Earthlike planet, with 90% of its surface covered in water or ice. The planet has a slight ring, and a damaged moon. It seems likely that the ring is largely debris from the moon, and maybe whatever hit it. The surface is covered in near-perpetual storms.\r\n\r\n1.85 AU\r\n\r\n0.85 g\r\n\r\nThe storms on this planet are so highly charged that electronic systems can\u2019t function. All tech actions, attacks, and SYSTEMS checks and saves receive +1 Difficulty.",
+        "parent": "Izanami"
+    },
+    {
+        "name": "Izanami - Belt I",
+        "description": "A collection of large asteroids, ranging from the size of a house to the size of a small moon.\r\n\r\n2.1 AU\r\n\r\nMechs count as flying when they Boost but must land after they move. Characters never take damage from falling.",
+        "parent": "Izanami"
+    },
+    {
+        "name": "Izanami V",
+        "description": "A planet with a wild assortment of rings, a highly elliptical orbit, and ruins that suggest that it may have once been habitable.\r\n\r\n4 AU\r\n\r\n0.75 g\r\n\r\nThis world has extremely high levels of ambient radiation, possibly because of nuclear war, atmospheric degradation, or something more sinister. Outside of mechs, humans without environmental protection temporarily decrease their maximum HP by 1 per hour of exposure. If they reach 0 HP this way, they die. They can regain their maximum HP by performing a Full Repair in a safe environment.\r\n\r\nThis world is regularly rocked by earthquakes. During earthquakes, roll 1d6 at the end of each round: on 1, all mechs must succeed on a HULL save or be knocked Prone unless they are flying.",
+        "parent": null
+    },
+    {
+        "name": "Izanami VI",
+        "description": "A large rocky planet with a tidally locked moon.\r\n\r\n4 AU\r\n\r\n1.75 g",
+        "parent": "Izanami"
+    },
+    {
+        "name": "Izanami VII",
+        "description": "A gas giant with a large number of moons. Seems pretty jovial.\r\n\r\n13.5 AU\r\n\r\n3.75 g\r\n\r\nFor moons:\r\n\r\nMechs count as flying when they Boost but must land after they move. Characters never take damage from falling.\r\n\r\nAll characters gain Resistance to Explosive Damage.",
+        "parent": "Izanami"
+    }
+]
