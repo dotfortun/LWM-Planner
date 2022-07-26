@@ -1,0 +1,148 @@
+[
+    {
+        "value": "OPEN",
+        "name": "Open",
+        "next": [
+            {
+                "value": "PLANNING",
+                "name": "Planning Stage",
+                "next": [
+                    {
+                        "value": "RUNNING",
+                        "name": "Running",
+                        "next": [
+                            {
+                                "value": "FAILURE",
+                                "name": "Mission Failed",
+                                "next": []
+                            },
+                            {
+                                "value": "PARTIAL_SUCCESS",
+                                "name": "Partial Success",
+                                "next": []
+                            },
+                            {
+                                "value": "SUCCESS",
+                                "name": "Successful Mission",
+                                "next": []
+                            },
+                            {
+                                "value": "EXPEDITION_COMPLETE",
+                                "name": "Expedition Complete",
+                                "next": []
+                            }
+                        ]
+                    },
+                    {
+                        "value": "CANCELLED",
+                        "name": "Cancelled",
+                        "next": []
+                    },
+                    {
+                        "value": "DELAYED",
+                        "name": "Delayed",
+                        "next": []
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "value": "PLANNING",
+        "name": "Planning Stage",
+        "next": [
+            {
+                "value": "RUNNING",
+                "name": "Running",
+                "next": [
+                    {
+                        "value": "FAILURE",
+                        "name": "Mission Failed",
+                        "next": []
+                    },
+                    {
+                        "value": "PARTIAL_SUCCESS",
+                        "name": "Partial Success",
+                        "next": []
+                    },
+                    {
+                        "value": "SUCCESS",
+                        "name": "Successful Mission",
+                        "next": []
+                    },
+                    {
+                        "value": "EXPEDITION_COMPLETE",
+                        "name": "Expedition Complete",
+                        "next": []
+                    }
+                ]
+            },
+            {
+                "value": "CANCELLED",
+                "name": "Cancelled",
+                "next": []
+            },
+            {
+                "value": "DELAYED",
+                "name": "Delayed",
+                "next": []
+            }
+        ]
+    },
+    {
+        "value": "RUNNING",
+        "name": "Running",
+        "next": [
+            {
+                "value": "FAILURE",
+                "name": "Mission Failed",
+                "next": []
+            },
+            {
+                "value": "PARTIAL_SUCCESS",
+                "name": "Partial Success",
+                "next": []
+            },
+            {
+                "value": "SUCCESS",
+                "name": "Successful Mission",
+                "next": []
+            },
+            {
+                "value": "EXPEDITION_COMPLETE",
+                "name": "Expedition Complete",
+                "next": []
+            }
+        ]
+    },
+    {
+        "value": "CANCELLED",
+        "name": "Cancelled",
+        "next": []
+    },
+    {
+        "value": "DELAYED",
+        "name": "Delayed",
+        "next": []
+    },
+    {
+        "value": "FAILURE",
+        "name": "Mission Failed",
+        "next": []
+    },
+    {
+        "value": "PARTIAL_SUCCESS",
+        "name": "Partial Success",
+        "next": []
+    },
+    {
+        "value": "SUCCESS",
+        "name": "Successful Mission",
+        "next": []
+    },
+    {
+        "value": "EXPEDITION_COMPLETE",
+        "name": "Expedition Complete",
+        "next": []
+    }
+]
