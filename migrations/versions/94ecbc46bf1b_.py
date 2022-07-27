@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 696630b2e661
+Revision ID: 94ecbc46bf1b
 Revises: 
-Create Date: 2022-07-26 16:58:24.700074
+Create Date: 2022-07-27 02:10:46.677053
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '696630b2e661'
+revision = '94ecbc46bf1b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -31,10 +31,12 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('mission_state',
-    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('value', sa.String(length=120), nullable=True),
     sa.Column('name', sa.String(length=120), nullable=True),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id', 'value'),
+    sa.UniqueConstraint('id'),
+    sa.UniqueConstraint('value')
     )
     op.create_table('pilot',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -55,8 +57,15 @@ def upgrade():
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email')
     )
+    op.create_table('location_tree',
+    sa.Column('parent', sa.Integer(), nullable=True),
+    sa.Column('child', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['child'], ['location.id'], ),
+    sa.ForeignKeyConstraint(['parent'], ['location.id'], )
+    )
     op.create_table('mission',
     sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('gm_id', sa.Integer(), nullable=True),
     sa.Column('name', sa.String(length=120), nullable=True),
     sa.Column('description', sa.Text(), nullable=True),
     sa.Column('difficulty', sa.Integer(), nullable=True),
@@ -64,6 +73,7 @@ def upgrade():
     sa.Column('schedule', sa.DateTime(), nullable=True),
     sa.Column('state_id', sa.Integer(), nullable=True),
     sa.Column('location_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['gm_id'], ['user.id'], ),
     sa.ForeignKeyConstraint(['location_id'], ['location.id'], ),
     sa.ForeignKeyConstraint(['state_id'], ['mission_state.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -113,6 +123,7 @@ def downgrade():
     op.drop_table('transaction')
     op.drop_table('mission_state_changes')
     op.drop_table('mission')
+    op.drop_table('location_tree')
     op.drop_table('user')
     op.drop_table('pilot')
     op.drop_table('mission_state')

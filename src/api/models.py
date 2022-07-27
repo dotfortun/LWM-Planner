@@ -297,20 +297,13 @@ class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=True)
     description = db.Column(db.Text, nullable=True)
-    child_locations = db.relationship(
-        "Location",
-        secondary=location_tree,
-        primaryjoin=(id == location_tree.c.parent),
-        secondaryjoin=(id == location_tree.c.child),
-        uselist=True,
-        viewonly=True
-    )
     parent = db.relationship(
         "Location",
         secondary=location_tree,
         primaryjoin=(id == location_tree.c.child),
         secondaryjoin=(id == location_tree.c.parent),
-        uselist=False
+        uselist=False,
+        backref="child_locations"
     )
 
     def __repr__(self):
@@ -345,8 +338,10 @@ mission_state_changes = db.Table(
 
 class MissionState(db.Model):
     __tablename__ = "mission_state"
-    id = db.Column(db.Integer, primary_key=True)
-    value = db.Column(db.String(120), nullable=True, unique=True)
+    id = db.Column(db.Integer, primary_key=True,
+                   unique=True, autoincrement=True)
+    value = db.Column(db.String(120), nullable=True,
+                      unique=True, primary_key=True)
     name = db.Column(db.String(120), nullable=True)
     prev = db.relationship(
         "MissionState",

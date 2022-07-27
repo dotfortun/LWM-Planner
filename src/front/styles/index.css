@@ -1,3 +1,11 @@
 /* 
     General Styles used on every website (Don't Repeat Yourself)
 */
+
+.lancer_red {
+  color: #c21f45;
+}
+
+.lancer_red_bg {
+  background: #c21f45;
+}

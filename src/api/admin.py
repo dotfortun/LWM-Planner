@@ -57,13 +57,12 @@ class MissionView(ModelView):
 class MissionStateView(ModelView):
     column_list = [
         'id',
-        'name',
         'value',
+        'name',
         'valid_state_changes',
     ]
     column_editable_list = [
         'name',
-        'value',
     ]
 
 
