@@ -123,6 +123,15 @@ class Pilot(db.Model):
             )
         ]
 
+    @property
+    def frames(self):
+        return [
+            transaction.item for transaction in filter(
+                lambda x: not x.is_refunded and x.item.gear_type.value == "FRAME",
+                self.transactions
+            )
+        ]
+
     def serialize(self, no_recurse=False):
         if no_recurse:
             return {
@@ -153,6 +162,9 @@ class Pilot(db.Model):
             "gear": [
                 x.serialize() for x in self.gear
             ],
+            "frames": [
+                x.serialize() for x in self.frames
+            ],
             "transactions": [
                 x.serialize() for x in self.transactions
             ],
@@ -162,11 +174,28 @@ class Pilot(db.Model):
         }
 
 
+class GearType(db.Model):
+    __tablename__ = "gear_type"
+    id = db.Column(db.Integer, primary_key=True,
+                   unique=True, autoincrement=True)
+    value = db.Column(db.String(120), nullable=True,
+                      unique=True, primary_key=True)
+    name = db.Column(db.String(120), nullable=True)
+
+    def __repr__(self):
+        return '<GearType {}>'.format(self.name)
+
+
 class Gear(db.Model):
     __tablename__ = "gear"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=True)
     description = db.Column(db.Text, nullable=True)
+    type_id = db.Column(db.Integer, db.ForeignKey("gear_type.id"))
+    gear_type = db.relationship(
+        "GearType",
+        uselist=False
+    )
 
     def __repr__(self):
         return '<Gear {}>'.format(self.name)
