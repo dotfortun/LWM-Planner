@@ -5,7 +5,7 @@ import ScrollToTop from "./component/scrollToTop";
 import { Home } from "./pages/home";
 import injectContext from "./store/appContext";
 
-import { Navbar } from "./component/navbar";
+import { Navigation } from "./component/navigation";
 import { Footer } from "./component/footer";
 import { ProfilePage } from "./pages/profile";
 import { PilotPage } from "./pages/pilots";
@@ -20,7 +20,7 @@ const Layout = () => {
     <div>
       <BrowserRouter basename={basename}>
         <ScrollToTop>
-          <Navbar />
+          <Navigation />
           <Routes>
             <Route element={<Home />} path="/" />
             <Route element={<ProfilePage />} path="/profile" />

@@ -18,9 +18,7 @@ export const Home = () => {
         </Col>
       </Row>
       <Row>
-        <Col sm={{ span: 8, offset: 2 }}>
-          <LoginForm nav_to="/profile" />
-        </Col>
+        <Col sm={{ span: 8, offset: 2 }}></Col>
       </Row>
     </Container>
   );
