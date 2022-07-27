@@ -6,7 +6,6 @@ const getState = ({ getStore, getActions, setStore }) => {
       pilots: [],
     },
     actions: {
-
       getAuthOptions: (method = "GET", body = {}) => {
         return {
           method: method,
@@ -51,7 +50,9 @@ const getState = ({ getStore, getActions, setStore }) => {
             return resp;
           })
           .then((resp) => resp.json())
-          .then((data) => setStore({ user: data?.user }))
+          .then((data) =>
+            setStore({ user: data?.user, pilots: data?.user?.pilots })
+          )
           .then(() => getActions().dehydrate());
       },
 
@@ -96,7 +97,6 @@ const getState = ({ getStore, getActions, setStore }) => {
           setStore(update);
         }
       },
-
     },
   };
 };

@@ -15,7 +15,7 @@ export const Footer = () => {
 
   return (
     <footer className="footer mt-auto py-3 text-center">
-      <p>{message}</p>
+      <small>{message}</small>
     </footer>
   );
 };
