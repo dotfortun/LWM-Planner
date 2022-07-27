@@ -61,7 +61,7 @@ def login():
         "password": <str: password>
     }
     """
-    user = User.query.filter_by(request.json.get("email", "")).first()
+    user = User.query.filter_by(email=request.json.get("email", "")).first()
     if user:
         if user.check_password_hash(request.json.get("password", "")):
             return jsonify(token=create_access_token(identity=user.id)), 200
