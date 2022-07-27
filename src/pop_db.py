@@ -1,8 +1,80 @@
 from app import app
-from api.models import db, MissionState, Location
+from api.models import (
+    db, MissionState, Location, User,
+    GearType, Gear, Transaction, Pilot,
+    Mission
+)
 import json
 
 with app.app_context():
+    gear_types = [
+        GearType(name="Frame", value="FRAME"),
+        GearType(name="System", value="SYSTEM"),
+        GearType(name="Weapon", value="WEAPON"),
+    ]
+
+    for i in gear_types:
+        db.session.add(i)
+    db.session.commit()
+
+    gear_types = {
+        gt.value: gt for gt in GearType.query.all()
+    }
+
+    gear = [
+        Gear(
+            name="IPS-N DRAKE",
+            description="",
+            gear_type=gear_types["FRAME"]
+        ),
+        Gear(
+            name="ASSAULT CANNON",
+            description="",
+            gear_type=gear_types["WEAPON"]
+        ),
+        Gear(
+            name="ARGONAUT SHIELD",
+            description="",
+            gear_type=gear_types["SYSTEM"]
+        ),
+    ]
+
+    for i in gear:
+        db.session.add(i)
+    db.session.commit()
+
+    user = User(
+        email="test@test.com",
+        password="asdf",
+        is_admin=True
+    )
+
+    pilot = Pilot(
+        name="Test McTestington",
+        callsign="Testy",
+        hull=1,
+        agility=2,
+        systems=3,
+        engineering=4
+    )
+
+    user.pilots.append(pilot)
+    db.session.merge(user)
+
+    pilot = Pilot.query.first()
+
+    gear = Gear.query.all()
+
+    for item in gear:
+        db.session.add(Transaction(
+            item=item,
+            pilot=pilot,
+            cost=0
+        ))
+    db.session.commit()
+
+    # Loading MissionStates
+
     with open("./src/data/missionstate.json", "rt") as statefile:
         states = json.loads(statefile.read())
         for state in states:
@@ -20,6 +92,9 @@ with app.app_context():
                     state.valid_state_changes.append(child)
             db.session.merge(state)
         db.session.commit()
+
+    # Loading locations
+
     with open("./src/data/locations.json", "rt") as statefile:
         locations = json.loads(statefile.read())
         for json_location in locations:

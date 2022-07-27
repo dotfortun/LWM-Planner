@@ -1,5 +1,5 @@
 from app import app
-from api.models import MissionState, Location
+from api.models import (User, Pilot, MissionState, Location)
 import json
 
 with app.app_context():

@@ -163,7 +163,7 @@ class Pilot(db.Model):
                 x.serialize() for x in self.gear
             ],
             "frames": [
-                x.serialize() for x in self.frames
+                x.serialize(desc=False) for x in self.frames
             ],
             "transactions": [
                 x.serialize() for x in self.transactions
