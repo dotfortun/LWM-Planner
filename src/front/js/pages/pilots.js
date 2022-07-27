@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
+
+import { Context } from "../store/appContext";
 
 import "../../styles/pilots.css";
 
@@ -15,10 +17,10 @@ const PilotCard = ({ pilot }) => {
         <Row>
           <Col>
             <ul className="pilot_prop_stack">
-              <li>HULL: {pilot.hull}</li>
-              <li>AGILITY: {pilot.agility}</li>
-              <li>SYSTEMS: {pilot.sytstems}</li>
-              <li>ENGINEERING: {pilot.engineering}</li>
+              <li>HULL: {pilot.hase.hull}</li>
+              <li>AGILITY: {pilot.hase.agility}</li>
+              <li>SYSTEMS: {pilot.hase.systems}</li>
+              <li>ENGINEERING: {pilot.hase.engineering}</li>
               <li>GRIT: {pilot.grit}</li>
             </ul>
           </Col>
@@ -56,10 +58,19 @@ const PilotCard = ({ pilot }) => {
 };
 
 export const PilotPage = () => {
+  const { store, actions } = useContext(Context);
+
+  useEffect(() => {
+    actions.rehydrate();
+    actions.getActiveUser();
+  }, []);
+
   return (
     <Row>
       <Col sm={{ span: 10, offset: 1 }}>
-        <PilotCard pilot={} />
+        {store.pilots?.map((elem, idx) => (
+          <PilotCard pilot={elem} key={idx} />
+        ))}
       </Col>
     </Row>
   );

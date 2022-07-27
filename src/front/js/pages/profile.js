@@ -3,7 +3,6 @@ import { Col, Container, Row, Button, Form } from "react-bootstrap";
 
 import { Context } from "../store/appContext";
 import { Header } from "../component/header";
-import { LoginForm } from "../component/login";
 
 import "../../styles/home.css";
 

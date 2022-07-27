@@ -7,14 +7,24 @@ const getState = ({ getStore, getActions, setStore }) => {
     },
     actions: {
       getAuthOptions: (method = "GET", body = {}) => {
-        return {
-          method: method,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${getStore().user_token}`,
-          },
-          body: JSON.stringify(body),
-        };
+        if (method === "GET") {
+          return {
+            method: method,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${getStore().user_token}`,
+            },
+          };
+        } else {
+          return {
+            method: method,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${getStore().user_token}`,
+            },
+            body: JSON.stringify(body),
+          };
+        }
       },
 
       login: (email, pass) => {
