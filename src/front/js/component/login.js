@@ -29,7 +29,7 @@ export const LoginForm = ({ nav_to }) => {
   };
 
   return (
-    <>
+    <Form onSubmit={handleForm}>
       <Form.Group className="mb-3">
         <Form.Control type="email" placeholder="Enter email" ref={email} />
         <Form.Text className="text-muted">
@@ -48,6 +48,6 @@ export const LoginForm = ({ nav_to }) => {
       <Button variant="primary" onClick={handleForm}>
         Log In
       </Button>
-    </>
+    </Form>
   );
 };
