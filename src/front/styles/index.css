@@ -13,3 +13,7 @@ html {
 .lancer_red_bg {
   background: #c21f45;
 }
+
+nav a {
+  text-decoration: none;
+}

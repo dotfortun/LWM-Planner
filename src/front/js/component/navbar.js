@@ -7,7 +7,7 @@ export const Navbar = () => {
       <div className="container">
         <Link to="/">
           <span className="navbar-brand mb-0 h1">
-            <i className="fas fa-lg fa-torii-gate"></i>
+            <i className="fas fa-lg fa-torii-gate"></i> LWM Planner
           </span>
         </Link>
         <div className="ml-auto"></div>
