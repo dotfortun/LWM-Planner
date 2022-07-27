@@ -108,7 +108,7 @@ def post_pilot():
 @api.route("/missions", methods=['GET'])
 def get_missions():
     return jsonify(
-        missiosn=[x.serialize() for x in Mission.query.all()]
+        missions=[x.serialize() for x in Mission.query.all()]
     )
 
 

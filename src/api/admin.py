@@ -56,20 +56,22 @@ class MissionView(ModelView):
 
 class MissionStateView(ModelView):
     column_list = [
-        'id',
         'value',
         'name',
         'valid_state_changes',
     ]
-    column_editable_list = [
+    form_columns = [
+        'value',
         'name',
+        'prev',
+        'valid_state_changes'
     ]
 
 
 def setup_admin(app):
     app.secret_key = os.environ.get('FLASK_APP_KEY', 'sample key')
     app.config['FLASK_ADMIN_SWATCH'] = 'slate'
-    admin = Admin(app, name='LWM Planner Admin', template_mode='bootstrap3')
+    admin = Admin(app, name='LWM Planner Admin', template_mode='bootstrap4')
 
     # Add your models here, for example this is how we add a the User model to the admin
     admin.add_view(UserView(User, db.session))
