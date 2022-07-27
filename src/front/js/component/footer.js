@@ -6,6 +6,7 @@ export const Footer = () => {
   useEffect(() => {
     let messages = [
       "The GSV Ominous Doorstop would like you to know you are irreplaceable. For now.",
+      "The GSV Ominous Doorstop wants you to know that it it thankful for all of your fleshy help.",
     ];
 
     setMessage(messages[Math.floor(Math.random() * messages.length)]);
