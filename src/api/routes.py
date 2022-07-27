@@ -12,6 +12,10 @@ from api.utils import generate_sitemap, APIException
 
 api = Blueprint('api', __name__)
 
+
+def get_jwt_user():
+    return User.query.filter_by(id=get_jwt_identity()).first()
+
 # Users
 
 
@@ -27,8 +31,27 @@ def get_users():
 @api.route("/users/<int:id>", methods=['GET'])
 def get_user(id):
     return jsonify(
-        pilot=User.query.filter_by(id=id).first().serialize()
+        user=User.query.filter_by(id=id).first().serialize()
     )
+
+
+@api.route("/users/active", methods=['GET'])
+@jwt_required()
+def get_active_user():
+    return jsonify(
+        user=get_jwt_user().serialize()
+    )
+
+
+@api.route("/users/active", methods=['PUT', 'PATCH'])
+@jwt_required()
+def update_user():
+    user = get_jwt_user()
+    if user:
+        user.update(**request.get_json())
+        db.session.merge(user)
+        db.session.commit()
+        return jsonify(msg="Success."), 200
 
 
 @api.route("/users", methods=['POST'])
@@ -84,8 +107,8 @@ def get_pilot(id):
     )
 
 
-@jwt_required()
 @api.route("/pilots", methods=['POST'])
+@jwt_required()
 def post_pilot():
     """
     {
@@ -93,7 +116,7 @@ def post_pilot():
         "callsign": <str: callsign>
     }
     """
-    user = User.query.filter_by(id=get_jwt_identity()).first()
+    user = get_jwt_user()
     user.pilots.append(Pilot(
         name=request.json.get("name", None),
         callsign=request.json.get("callsign", None)
@@ -119,8 +142,8 @@ def get_mission(id):
     )
 
 
-@jwt_required()
 @api.route("/missions", methods=['POST'])
+@jwt_required()
 def post_mission():
     """
     {
@@ -144,8 +167,8 @@ def post_mission():
     return jsonify(msg="Success."), 200
 
 
-@jwt_required()
 @api.route("/missions/join", methods=['POST'])
+@jwt_required()
 def post_join_mission():
     """
     {
@@ -174,8 +197,8 @@ def get_location(id):
     )
 
 
-@jwt_required()
 @api.route("/locations", methods=['POST'])
+@jwt_required()
 def post_location():
     """
     {

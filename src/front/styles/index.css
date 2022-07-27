@@ -2,6 +2,10 @@
     General Styles used on every website (Don't Repeat Yourself)
 */
 
+html {
+  overflow-x: hidden;
+}
+
 .lancer_red {
   color: #c21f45;
 }

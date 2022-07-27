@@ -6,7 +6,7 @@ from .models import (
     Mission, Location, MissionState
 )
 from flask_admin.contrib.sqla import ModelView
-from wtforms.fields import PasswordField, DateTimeField
+from wtforms.fields import PasswordField, DateTimeField, EmailField
 
 
 class UserView(ModelView):
@@ -14,6 +14,7 @@ class UserView(ModelView):
     column_editable_list = ['is_active', ]
     column_exclude_list = ['_password', ]
     form_extra_fields = {
+        'email': EmailField('email'),
         'password': PasswordField('password')
     }
 

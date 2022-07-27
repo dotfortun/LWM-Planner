@@ -1,13 +1,24 @@
-h1 {
+.header_root {
   font-family: "Helvetica Bold", sans-serif;
   font-weight: 700;
   text-transform: uppercase;
-  margin: 0 auto 0 -2rem;
-  padding: 0.25rem 2.5rem 0.25rem 7rem;
+  margin: 0 auto 0 calc(-100vw + 5rem);
+  padding: 0.25rem 2.5rem 0.25rem 100vw;
   width: fit-content;
   transform: skew(-0.65rad);
 }
 
-h1 > div {
+.header_root > div {
   transform: skew(0.65rad) !important;
+}
+
+.header_root.right {
+  margin: 0 calc(-100vw + 5rem) 0 auto;
+  padding: 0.25rem 100vw 0.25rem 2.5rem;
+  width: fit-content;
+  transform: skew(0.65rad);
+}
+
+.header_root.right > div {
+  transform: skew(-0.65rad) !important;
 }
