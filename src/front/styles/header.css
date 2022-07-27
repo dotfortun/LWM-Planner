@@ -1,0 +1,13 @@
+h1 {
+  font-family: "Helvetica Bold", sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0 auto 0 -2rem;
+  padding: 0.25rem 2.5rem 0.25rem 7rem;
+  width: fit-content;
+  transform: skew(-0.65rad);
+}
+
+h1 > div {
+  transform: skew(0.65rad) !important;
+}
