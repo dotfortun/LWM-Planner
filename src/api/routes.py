@@ -122,8 +122,39 @@ def get_mission(id):
 @jwt_required()
 @api.route("/missions", methods=['POST'])
 def post_mission():
+    """
+    {
+        "name": <str>,
+        "description": <str>,
+        "difficulty": <int>,
+        "is_job": <bool>,
+        "location": <str>
+    }
+    """
+    mission = Mission(
+        name=request.json.get("name", None),
+        description=request.json.get("description", None),
+        difficulty=request.json.get("difficulty", 1),
+        is_job=request.json.get("is_job", True),
+        location=Location.query.filter_by(
+            name=request.json.get("location", "")).first
+    )
+    db.session.merge(mission)
+    db.session.commit()
+    return jsonify(msg="Success."), 200
+
+
+@jwt_required()
+@api.route("/missions/join", methods=['POST'])
+def post_join_mission():
+    """
+    {
+        "pilot": <int: pilot_id>,
+        "mission": <int: mission_id>
+    }
+    """
     return jsonify(
-        pilot=Mission.query.filter_by(id=id).first().serialize()
+        mission=Mission.query.filter_by(id=id).first().serialize()
     )
 
 # Locations
@@ -146,6 +177,20 @@ def get_location(id):
 @jwt_required()
 @api.route("/locations", methods=['POST'])
 def post_location():
-    return jsonify(
-        pilot=Location.query.filter_by(id=id).first().serialize()
+    """
+    {
+        "name": <str>,
+        "description": <str>,
+        "parent": <str>
+    }
+    """
+    parent = Location.query.filter_by(
+        name=request.json.get("parent", "")).first()
+    loc = Location(
+        name=request.json.get("name", ""),
+        description=request.json.get("description", ""),
+        parent=parent
     )
+    db.session.merge(loc)
+    db.session.commit()
+    return jsonify(msg="Success."), 200
