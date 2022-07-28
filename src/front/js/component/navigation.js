@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
+
 import { LoginForm } from "./login";
+import { Context } from "../store/appContext";
 
 export const Navigation = () => {
+  const { store } = useContext(Context);
   const loc = useLocation();
 
   return (
@@ -16,7 +19,21 @@ export const Navigation = () => {
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav>
             <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/profile">Profile</Nav.Link>
+            {!!store.user_token ? (
+              <NavDropdown
+                title="Account"
+                href="/profile"
+                menuVariant="dark"
+                align="end"
+              >
+                <NavDropdown.Item href="/profile">
+                  <span>Profile</span>
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/profile/pilots">
+                  <span>Pilots</span>
+                </NavDropdown.Item>
+              </NavDropdown>
+            ) : null}
             <NavDropdown
               title="Login"
               menuVariant="dark"

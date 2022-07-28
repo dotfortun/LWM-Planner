@@ -7,7 +7,7 @@ import "../../styles/pilots.css";
 
 const PilotCard = ({ pilot }) => {
   return (
-    <Card className="bg-secondary" key={pilot.id}>
+    <Card className="bg-secondary mb-3" key={pilot.id}>
       <Card.Header>
         <h3>
           {pilot.name} - Callsign "{pilot.callsign}"
@@ -30,12 +30,9 @@ const PilotCard = ({ pilot }) => {
               <li>
                 <hr />
               </li>
-              <li>
-                IPS-N DRAKE <em>"CAN I HAS DRAEK"</em>
-              </li>
-              <li>
-                GMS EVEREST <em>"CHEEPFLEET"</em>
-              </li>
+              {pilot.frames.map((elem, idx) => (
+                <li>{elem.name}</li>
+              ))}
             </ul>
           </Col>
           <Col>
