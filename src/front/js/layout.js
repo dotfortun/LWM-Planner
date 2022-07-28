@@ -9,6 +9,7 @@ import { Navigation } from "./component/navigation";
 import { Footer } from "./component/footer";
 import { ProfilePage } from "./pages/profile";
 import { PilotPage } from "./pages/pilots";
+import { MissionPage } from "./pages/mission";
 
 //create your first component
 const Layout = () => {
@@ -25,6 +26,7 @@ const Layout = () => {
             <Route element={<Home />} path="/" />
             <Route element={<ProfilePage />} path="/profile" />
             <Route element={<PilotPage />} path="/profile/pilots" />
+            <Route element={<MissionPage />} path="/missions/:id" />
           </Routes>
           <Footer />
         </ScrollToTop>

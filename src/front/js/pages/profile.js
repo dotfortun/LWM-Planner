@@ -31,16 +31,12 @@ export const ProfilePage = () => {
       <Row>
         <Col xs={{ span: 4, offset: 1 }}>
           <Header title={`Password`} size="h4" />
-          <Form.Group className="d-inline-flex">
-            <Form.Control
-              type="password"
-              placeholder="Change Password"
-              ref={pass}
-            />
+          <div className="d-flex" style={{ height: "2.5rem" }}>
+            <Form.Control type="password" placeholder="Submit" ref={pass} />
             <Button className="ms-2" onClick={handleUpdateUser}>
-              Change Password
+              Submit
             </Button>
-          </Form.Group>
+          </div>
         </Col>
       </Row>
     </Container>
