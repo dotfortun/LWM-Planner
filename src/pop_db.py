@@ -11,6 +11,7 @@ with app.app_context():
         GearType(name="Frame", value="FRAME"),
         GearType(name="System", value="SYSTEM"),
         GearType(name="Weapon", value="WEAPON"),
+        GearType(name="Weapon Mod", value="MOD"),
     ]
 
     for i in gear_types:
@@ -21,23 +22,44 @@ with app.app_context():
         gt.value: gt for gt in GearType.query.all()
     }
 
-    gear = [
-        Gear(
-            name="IPS-N DRAKE",
-            description="",
-            gear_type=gear_types["FRAME"]
-        ),
-        Gear(
-            name="ASSAULT CANNON",
-            description="",
-            gear_type=gear_types["WEAPON"]
-        ),
-        Gear(
-            name="ARGONAUT SHIELD",
-            description="",
-            gear_type=gear_types["SYSTEM"]
-        ),
-    ]
+    gear = []
+
+    with open("./src/data/frames.json", "rt") as framefile:
+        frames = json.loads(framefile.read())
+        for frame in frames[1:]:
+            gear.append(Gear(
+                name=' '.join([frame["source"], frame["name"]]),
+                description=frame.get("description", ""),
+                gear_type=gear_types["FRAME"],
+                weight=0.5
+            ))
+    with open("./src/data/mods.json", "rt") as modfile:
+        mods = json.loads(modfile.read())
+        for mod in mods[1:]:
+            gear.append(Gear(
+                name=' '.join([mod["source"], mod["name"]]),
+                description=mod.get("description", ""),
+                gear_type=gear_types["MOD"],
+                weight=0.5
+            ))
+    with open("./src/data/systems.json", "rt") as systemfile:
+        systems = json.loads(systemfile.read())
+        for system in systems[1:]:
+            gear.append(Gear(
+                name=' '.join([system["source"], system["name"]]),
+                description=system.get("description", ""),
+                gear_type=gear_types["SYSTEM"],
+                weight=0.5
+            ))
+    with open("./src/data/weapons.json", "rt") as weaponfile:
+        weapons = json.loads(weaponfile.read())
+        for weapon in weapons[1:]:
+            gear.append(Gear(
+                name=weapon["name"],
+                description=weapon.get("description", ""),
+                gear_type=gear_types["WEAPON"],
+                weight=0.5
+            ))
 
     for i in gear:
         db.session.add(i)

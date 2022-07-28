@@ -1,12 +1,16 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
+from datetime import datetime, date, time
+import random
+
 from flask import Flask, request, jsonify, url_for, Blueprint
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 
 from api.models import (
     db, User, Pilot, Transaction, Gear,
-    Mission, Location, MissionState
+    Mission, Location, MissionState,
+    GearType
 )
 from api.utils import generate_sitemap, APIException
 
@@ -227,3 +231,29 @@ def post_location():
     db.session.merge(loc)
     db.session.commit()
     return jsonify(msg="Success."), 200
+
+# Shop methods
+
+
+@api.route('/store', methods=['GET'])
+def get_store():
+    seed = int(datetime.combine(date.today(), time(0, 0, 0)).timestamp())
+    categories = GearType.query.filter(GearType.value.in_([
+        "FRAME", "SYSTEM", "WEAPON", "MOD"
+    ])).all()
+    resp = {}
+    num_choices = {
+        "FRAME": 5,
+        "SYSTEM": 5,
+        "WEAPON": 10,
+        "MOD": 1
+    }
+    for cat in categories:
+        random.seed(seed)
+        resp[cat.value] = [
+            x.serialize() for x in random.choices(
+                cat.gear,
+                [x.weight for x in cat.gear],
+                k=num_choices.get(cat.value, 1)
+            )]
+    return jsonify(resp)

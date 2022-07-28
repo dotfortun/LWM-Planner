@@ -192,9 +192,11 @@ class Gear(db.Model):
     name = db.Column(db.String(120), nullable=True)
     description = db.Column(db.Text, nullable=True)
     type_id = db.Column(db.Integer, db.ForeignKey("gear_type.id"))
+    weight = db.Column(db.Float, default=0.0)
     gear_type = db.relationship(
         "GearType",
-        uselist=False
+        uselist=False,
+        backref="gear"
     )
 
     def __repr__(self):
