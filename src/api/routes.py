@@ -246,14 +246,18 @@ def get_store():
         "FRAME": 5,
         "SYSTEM": 5,
         "WEAPON": 10,
-        "MOD": 1
+        "MOD": 2
     }
     for cat in categories:
         random.seed(seed)
-        resp[cat.value] = [
-            x.serialize() for x in random.choices(
-                cat.gear,
-                [x.weight for x in cat.gear],
-                k=num_choices.get(cat.value, 1)
-            )]
+        choices = random.choices(
+            cat.gear,
+            [x.weight for x in cat.gear],
+            k=num_choices.get(cat.value, 1)
+        )
+        items = []
+        for item in choices:
+            if item.serialize() not in items:
+                items.append(item.serialize())
+        resp[cat.value] = items
     return jsonify(resp)
