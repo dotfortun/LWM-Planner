@@ -4,6 +4,12 @@ const getState = ({ getStore, getActions, setStore }) => {
       user_token: null,
       user: {},
       pilots: [],
+      shop: {
+        frame: [],
+        weapon: [],
+        system: [],
+        mod: [],
+      },
     },
     actions: {
       getAuthOptions: (method = "GET", body = {}) => {
@@ -91,6 +97,24 @@ const getState = ({ getStore, getActions, setStore }) => {
           })
           .then((resp) => resp.json())
           .then((data) => setStore({ pilots: data?.pilots }))
+          .then(() => getActions().dehydrate());
+      },
+
+      getShop: () => {
+        const opts = getActions().getAuthOptions("GET");
+        return fetch(process.env.BACKEND_URL + "/api/shop", opts)
+          .then((resp) => {
+            if (!resp.ok) {
+              throw Error("Invalid login");
+            }
+            return resp;
+          })
+          .then((resp) => resp.json())
+          .then((data) => {
+            console.log(data);
+            return data;
+          })
+          .then((data) => setStore({ shop: data?.shop_items }))
           .then(() => getActions().dehydrate());
       },
 

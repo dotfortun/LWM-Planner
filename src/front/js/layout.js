@@ -10,6 +10,7 @@ import { Footer } from "./component/footer";
 import { ProfilePage } from "./pages/profile";
 import { PilotPage } from "./pages/pilots";
 import { MissionPage } from "./pages/mission";
+import { ShopPage } from "./pages/shop";
 
 //create your first component
 const Layout = () => {
@@ -24,6 +25,7 @@ const Layout = () => {
           <Navigation />
           <Routes>
             <Route element={<Home />} path="/" />
+            <Route element={<ShopPage />} path="/shop" />
             <Route element={<ProfilePage />} path="/profile" />
             <Route element={<PilotPage />} path="/profile/pilots" />
             <Route element={<MissionPage />} path="/missions/:id" />

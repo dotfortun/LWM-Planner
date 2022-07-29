@@ -283,7 +283,7 @@ def post_location():
 # Shop methods
 
 
-@api.route('/store', methods=['GET'])
+@api.route('/shop', methods=['GET'])
 def get_store():
     seed = int(datetime.combine(date.today(), time(0, 0, 0)).timestamp())
     categories = GearType.query.filter(GearType.value.in_([
@@ -307,5 +307,5 @@ def get_store():
         for item in choices:
             if item.serialize() not in items:
                 items.append(item.serialize())
-        resp[cat.value] = items
-    return jsonify(resp)
+        resp[cat.value.lower()] = items
+    return jsonify(shop_items=resp)
