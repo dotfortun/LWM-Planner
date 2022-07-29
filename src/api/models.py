@@ -66,6 +66,19 @@ class User(db.Model):
                 setattr(self, key, value)
 
 
+class Setting(db.Model):
+    __tablename__ = "setting"
+    id = db.Column(db.Integer, primary_key=True,
+                   unique=True, autoincrement=True)
+    key = db.Column(db.String(120), primary_key=True)
+    setting = db.Column(db.JSON, default=None)
+
+    def update(self, **kwargs):
+        for key, value in kwargs.items():
+            if hasattr(self, key) and key != "id":
+                setattr(self, key, value)
+
+
 pilot_to_mission = db.Table(
     "pilot_to_mission",
     db.metadata,
@@ -448,24 +461,3 @@ class MissionState(db.Model):
         for key, value in kwargs.items():
             if hasattr(self, key) and key != "id":
                 setattr(self, key, value)
-
-
-class Settings(db.Model):
-    __tablename__ = "settings"
-    id = db.Column(db.Integer, primary_key=True)
-    key = db.Column(db.String(120))
-    _value = db.Column(db.Text)
-
-    @hybrid_property
-    def value(self):
-        return json.loads(self._value)
-
-    @value.setter
-    def value(self, val):
-        self._value = json.dumps(val)
-
-    def serialize(self):
-        return {
-            "key": self.key,
-            "value": self.value
-        }

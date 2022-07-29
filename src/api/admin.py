@@ -3,10 +3,13 @@ import os
 from flask_admin import Admin
 from .models import (
     db, User, Pilot, Transaction, Gear,
-    Mission, Location, MissionState, GearType
+    Mission, Location, MissionState, GearType,
+    Setting
 )
 from flask_admin.contrib.sqla import ModelView
-from wtforms.fields import PasswordField, DateTimeField, EmailField
+from wtforms.fields import (
+    PasswordField, DateTimeField, EmailField, TextAreaField
+)
 
 
 class UserView(ModelView):
@@ -80,6 +83,19 @@ class GearTypeView(ModelView):
     ]
 
 
+class SettingView(ModelView):
+    column_list = [
+        'key',
+        '_val',
+    ]
+    form_columns = [
+        'key',
+    ]
+    form_extra_fields = {
+        'val': TextAreaField('val')
+    }
+
+
 def setup_admin(app):
     app.secret_key = os.environ.get('FLASK_APP_KEY', 'sample key')
     app.config['FLASK_ADMIN_SWATCH'] = 'slate'
@@ -87,6 +103,7 @@ def setup_admin(app):
 
     # Add your models here, for example this is how we add a the User model to the admin
     admin.add_view(UserView(User, db.session))
+    admin.add_view(SettingView(Setting, db.session))
     admin.add_view(PilotView(Pilot, db.session))
     admin.add_view(GearTypeView(GearType, db.session))
     admin.add_view(ModelView(Gear, db.session))
