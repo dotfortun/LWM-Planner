@@ -116,10 +116,8 @@ def get_pilot(id):
 @api.route("/pilots/active", methods=['GET'])
 @jwt_required()
 def get_active_user_pilots():
-    user = get_jwt_user()
-    print(user)
     return jsonify(
-        pilots=[x.serialize() for x in user.pilots]
+        pilots=[x.serialize() for x in current_user.pilots]
     )
 
 
@@ -132,7 +130,7 @@ def post_pilot():
         "callsign": <str: callsign>
     }
     """
-    user = get_jwt_user()
+    user = current_user
     user.pilots.append(Pilot(
         name=request.json.get("name", None),
         callsign=request.json.get("callsign", None)
