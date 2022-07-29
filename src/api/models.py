@@ -2,10 +2,12 @@ from datetime import datetime
 import json
 
 from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 from sqlalchemy.ext.hybrid import hybrid_property
 from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
+ma = Marshmallow()
 
 user_to_pilot = db.Table(
     "user_to_pilot",
@@ -64,6 +66,12 @@ class User(db.Model):
         for key, value in kwargs.items():
             if hasattr(self, key) and key != "id":
                 setattr(self, key, value)
+
+
+class UserSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = User
+        include_fk = True
 
 
 class Setting(db.Model):

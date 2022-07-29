@@ -15,13 +15,13 @@ from api.models import (
     Mission, Location, MissionState,
     GearType
 )
+from api.models import (
+    UserSchema
+)
 from api.utils import generate_sitemap, APIException
 
 api = APIBlueprint('api', __name__)
 
-
-def get_jwt_user():
-    return User.query.filter_by(id=get_jwt_identity()).first()
 
 # Users
 
@@ -62,6 +62,7 @@ def update_user():
 
 
 @api.route("/users", methods=['POST'])
+@app.ouput(UserSchema)
 def post_users():
     """
     {

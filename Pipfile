@@ -20,6 +20,7 @@ cloudinary = "*"
 flask-admin = "*"
 flask-jwt-extended = "*"
 apiflask = "*"
+marshmallow-sqlalchemy = "*"
 
 [requires]
 python_version = "3.8"
