@@ -19,6 +19,7 @@ export const Navigation = () => {
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav>
             <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="/shop">Shop</Nav.Link>
             {!!store.user_token ? (
               <NavDropdown
                 title="Account"
