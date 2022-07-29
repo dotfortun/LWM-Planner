@@ -5,7 +5,9 @@ from datetime import datetime, date, time
 import random
 
 from flask import Flask, request, jsonify, url_for, Blueprint
-from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
+from flask_jwt_extended import (
+    jwt_required, get_jwt_identity, create_access_token, current_user
+)
 
 from api.models import (
     db, User, Pilot, Transaction, Gear,
@@ -43,14 +45,14 @@ def get_user(id):
 @jwt_required()
 def get_active_user():
     return jsonify(
-        user=get_jwt_user().serialize()
+        user=current_user.serialize()
     )
 
 
 @api.route("/users/active", methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_user():
-    user = get_jwt_user()
+    user = current_user
     if user:
         user.update(**request.get_json())
         db.session.merge(user)
@@ -91,7 +93,7 @@ def login():
     user = User.query.filter_by(email=request.json.get("email", "")).first()
     if user:
         if user.check_password_hash(request.json.get("password", "")):
-            return jsonify(token=create_access_token(identity=user.id)), 200
+            return jsonify(token=create_access_token(identity=user)), 200
     return jsonify(msg="Failed to authenticate"), 400
 
 # Pilots

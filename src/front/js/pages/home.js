@@ -12,54 +12,28 @@ export const Home = () => {
   const { store, actions } = useContext(Context);
 
   let mission = {
-    description: "Yes, you can bring your draek.",
-    difficulty: 5,
-    is_job: false,
+    description:
+      "Lets shoot some doods and get some loots.  Yes, you can bring your draek.",
+    difficulty: 1,
+    is_job: true,
     location: {
       description: "",
       name: "Yomi Gate",
       parent: "Izanagi",
     },
-    loot: [
-      {
-        id: 1,
-        name: "IPS-N DRAKE",
-      },
-    ],
+    loot: [],
     mission_state: {
       name: "Open",
       value: "OPEN",
     },
-    name: "Camp Yomi Gate",
+    name: "Gate Camp On Yomi Gate",
     pilots: [
       {
-        callsign: "Testy",
-        grit: 5,
-        hase: {
-          agility: 2,
-          engineering: 4,
-          hull: 1,
-          systems: 3,
-        },
         id: 1,
-        manna: 1000,
-        name: "Test McTestington",
-      },
-      {
-        callsign: "Neophyte",
-        grit: 2,
-        hase: {
-          agility: 2,
-          engineering: 0,
-          hull: 2,
-          systems: 0,
-        },
-        id: 2,
-        manna: 1000,
-        name: "New Pilot",
+        pilot: "Test McTestington",
       },
     ],
-    scheduled_date: "Fri, 29 Jul 2022 00:00:00 GMT",
+    scheduled_date: "Sat, 06 Aug 2022 17:00:00 GMT",
   };
 
   return (

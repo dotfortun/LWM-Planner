@@ -132,7 +132,12 @@ class Pilot(db.Model):
             )
         ]
 
-    def serialize(self, no_recurse=False):
+    def serialize(self, no_recurse=False, abridge=False):
+        if abridge:
+            return {
+                "id": self.id,
+                "pilot": self.name
+            }
         if no_recurse:
             return {
                 "id": self.id,
@@ -303,7 +308,7 @@ class Mission(db.Model):
             "is_job": self.is_job,
             "scheduled_date": self.schedule,
             "pilots": [
-                x.serialize(no_recurse=True) for x in self.pilots
+                x.serialize(abridge=True) for x in self.pilots
             ],
             "loot": [
                 x.serialize(desc=False) for x in self.loot
