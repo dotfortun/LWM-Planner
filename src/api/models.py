@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -61,7 +62,7 @@ class User(db.Model):
 
     def update(self, **kwargs):
         for key, value in kwargs.items():
-            if hasattr(self, key):
+            if hasattr(self, key) and key != "id":
                 setattr(self, key, value)
 
 
@@ -178,6 +179,11 @@ class Pilot(db.Model):
             ]
         }
 
+    def update(self, **kwargs):
+        for key, value in kwargs.items():
+            if hasattr(self, key) and key != "id":
+                setattr(self, key, value)
+
 
 class GearType(db.Model):
     __tablename__ = "gear_type"
@@ -219,6 +225,11 @@ class Gear(db.Model):
             "name": self.name
         }
 
+    def update(self, **kwargs):
+        for key, value in kwargs.items():
+            if hasattr(self, key) and key != "id":
+                setattr(self, key, value)
+
 
 class Transaction(db.Model):
     __tablename__ = "transaction"
@@ -247,6 +258,11 @@ class Transaction(db.Model):
             "pilot": self.pilot.serialize(no_recurse=True),
             "is_refunded": self.is_refunded,
         }
+
+    def update(self, **kwargs):
+        for key, value in kwargs.items():
+            if hasattr(self, key) and key != "id":
+                setattr(self, key, value)
 
 
 mission_to_loot = db.Table(
@@ -320,6 +336,11 @@ class Mission(db.Model):
             },
         }
 
+    def update(self, **kwargs):
+        for key, value in kwargs.items():
+            if hasattr(self, key) and key != "id":
+                setattr(self, key, value)
+
 
 location_tree = db.Table(
     "location_tree",
@@ -363,6 +384,11 @@ class Location(db.Model):
             "description": self.description,
             "parent": parent,
         }
+
+    def update(self, **kwargs):
+        for key, value in kwargs.items():
+            if hasattr(self, key) and key != "id":
+                setattr(self, key, value)
 
 
 mission_state_changes = db.Table(
@@ -416,4 +442,30 @@ class MissionState(db.Model):
             "value": self.value,
             "name": self.name,
             "prev": prev,
+        }
+
+    def update(self, **kwargs):
+        for key, value in kwargs.items():
+            if hasattr(self, key) and key != "id":
+                setattr(self, key, value)
+
+
+class Settings(db.Model):
+    __tablename__ = "settings"
+    id = db.Column(db.Integer, primary_key=True)
+    key = db.Column(db.String(120))
+    _value = db.Column(db.Text)
+
+    @hybrid_property
+    def value(self):
+        return json.loads(self._value)
+
+    @value.setter
+    def value(self, val):
+        self._value = json.dumps(val)
+
+    def serialize(self):
+        return {
+            "key": self.key,
+            "value": self.value
         }
