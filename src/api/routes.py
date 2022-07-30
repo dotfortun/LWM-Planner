@@ -309,3 +309,22 @@ def get_store():
                 items.append(item.serialize())
         resp[cat.value.lower()] = items
     return jsonify(shop_items=resp)
+
+
+@api.route("/shop/purchase", methods=['POST'])
+@jwt_required()
+def make_purchase():
+    """
+    {
+        "pilot_id": <int: pilot id>,
+        "item_id": <int: item id>
+    }
+    """
+    pilot = Pilot.query.filter_by(id=request.get_json()["pilot_id"]).first()
+    item = Gear.query.filter_by(id=request.get_json()["item_id"]).first()
+    pilot.transactions.append(
+        Transaction(item=item, pilot=pilot)
+    )
+    db.session.merge(pilot)
+    db.session.commit()
+    return jsonify(msg="Success"), 200
