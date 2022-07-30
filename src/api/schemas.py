@@ -37,9 +37,18 @@ class UserSchemas:
         token = af.String()
 
 
-class PilotSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = Pilot
+class PilotSchemas:
+    class PilotIn(ma.Schema):
+        name = ma.String()
+        callsign = ma.String()
+
+    class PilotOut(ma.SQLAlchemyAutoSchema):
+        class Meta:
+            model = Pilot
+
+    class PilotsOut(ma.Schema):
+        users = af.List(af.Nested('PilotOut'))
+        pagination = af.Nested(PaginationSchema)
 
 
 class TransactionSchema(ma.SQLAlchemyAutoSchema):

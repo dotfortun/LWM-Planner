@@ -14,7 +14,6 @@ from api.models import (
 from api.schemas import (
     UserSchemas, PaginationSchema
 )
-from api.utils import generate_sitemap, APIException
 api = APIBlueprint('users', __name__, url_prefix='/users')
 
 
@@ -22,7 +21,7 @@ api = APIBlueprint('users', __name__, url_prefix='/users')
 class UserRoutes(MethodView):
     @api.input(PaginationSchema, 'query')
     @api.output(UserSchemas.UsersOut)
-    def get(query):
+    def get(self, query):
         pagination = User.query.paginate(
             page=query['page'],
             per_page=query['per_page']
@@ -34,19 +33,19 @@ class UserRoutes(MethodView):
         }
 
     @api.input(UserSchemas.UserIn)
-    def post():
+    def post(self):
         if not request.json.get("email", None):
-            return jsonify(msg="Missing email"), 400
+            return jsonify(message="Missing email"), 400
         if not request.json.get("password", None):
-            return jsonify(msg="Missing password"), 400
+            return jsonify(message="Missing password"), 400
         if User.query.filter_by(email=request.json.get("email", "")).first():
-            return jsonify(msg="User already exists."), 400
+            return jsonify(message="User already exists."), 400
         db.session.add(User(
             email=request.json.get("email"),
             password=request.json.get("password"),
         ))
         db.session.commit()
-        return jsonify(msg="User created successfully."), 200
+        return jsonify(message="User created successfully."), 200
 
 
 @api.get("/<int:id>")

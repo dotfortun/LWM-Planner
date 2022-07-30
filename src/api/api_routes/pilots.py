@@ -12,24 +12,9 @@ from api.models import (
     db, Pilot
 )
 from api.schemas import (
-    PaginationSchema
+    PaginationSchema, PilotSchemas
 )
-from api.utils import generate_sitemap, APIException
 api = APIBlueprint('pilots', __name__, url_prefix='/pilots')
-
-
-@api.route("/", methods=['GET'])
-def get_pilots():
-    return jsonify(
-        pilots=[x.serialize() for x in Pilot.query.all()]
-    )
-
-
-@api.route("/<int:id>", methods=['GET'])
-def get_pilot(id):
-    return jsonify(
-        pilot=Pilot.query.filter_by(id=id).first().serialize()
-    )
 
 
 @api.route("/active", methods=['GET'])
@@ -40,20 +25,29 @@ def get_active_user_pilots():
     )
 
 
-@api.route("/", methods=['POST'])
-@jwt_required()
-def post_pilot():
-    """
-    {
-        "name": <str: name>,
-        "callsign": <str: callsign>
-    }
-    """
-    user = current_user
-    user.pilots.append(Pilot(
-        name=request.json.get("name", None),
-        callsign=request.json.get("callsign", None)
-    ))
-    db.session.merge(user)
-    db.session.commit()
-    return jsonify(msg="Success."), 200
+@api.route("/<int:id>", methods=['GET'])
+def get_pilot(id):
+    return jsonify(
+        pilot=Pilot.query.filter_by(id=id).first().serialize()
+    )
+
+
+@api.route("/")
+class UserRoutes(MethodView):
+    @api.input(PaginationSchema, 'query')
+    def get(self):
+        return jsonify(
+            pilots=[x.serialize() for x in Pilot.query.all()]
+        )
+
+    @api.input(PilotSchemas.PilotIn)
+    @jwt_required()
+    def post(self):
+        user = current_user
+        user.pilots.append(Pilot(
+            name=request.json.get("name", None),
+            callsign=request.json.get("callsign", None)
+        ))
+        db.session.merge(user)
+        db.session.commit()
+        return jsonify(msg="Success."), 200

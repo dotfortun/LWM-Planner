@@ -14,7 +14,6 @@ from api.models import (
 from api.schemas import (
     UserSchemas, PaginationSchema
 )
-from api.utils import generate_sitemap, APIException
 api = APIBlueprint('shop', __name__, url_prefix='/shop')
 
 
