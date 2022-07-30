@@ -1,6 +1,7 @@
 from lib2to3.pgen2 import token
 from flask_marshmallow import Marshmallow
 from marshmallow_sqlalchemy.fields import Nested
+from apiflask import Schema
 import apiflask.fields as af
 import apiflask.validators as av
 
@@ -27,6 +28,7 @@ class UserSchemas:
     class UserOut(ma.SQLAlchemyAutoSchema):
         class Meta:
             model = User
+            pilots = af.Nested('PilotSchemas.PilotOut')
             exclude = ('_password', )
 
     class UsersOut(ma.Schema):
@@ -47,7 +49,7 @@ class PilotSchemas:
             model = Pilot
 
     class PilotsOut(ma.Schema):
-        users = af.List(af.Nested('PilotOut'))
+        pilots = af.List(af.Nested('PilotOut'))
         pagination = af.Nested(PaginationSchema)
 
 

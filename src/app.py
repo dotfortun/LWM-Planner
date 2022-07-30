@@ -21,7 +21,17 @@ from api.commands import setup_commands
 ENV = os.getenv("FLASK_ENV")
 static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../public/')
-app = APIFlask(__name__, docs_path='/api-docs')
+app = APIFlask(__name__, docs_path='/api-docs', docs_ui='rapidoc')
+app.config['RAPIDOC_THEME'] = 'dark'
+app.security_schemes = {  # equals to use config SECURITY_SCHEMES
+    'jwt': {
+        'type': 'http',
+        'scheme': 'bearer',
+        'in': 'header',
+        'bearerFormat': 'JWT'
+    }
+}
+
 app.url_map.strict_slashes = False
 
 # database condiguration

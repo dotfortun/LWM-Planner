@@ -1,7 +1,7 @@
 from datetime import datetime, date, time
 import random
 
-from apiflask import APIBlueprint, pagination_builder
+from apiflask import APIBlueprint, HTTPTokenAuth, pagination_builder
 from flask import request, jsonify
 from flask.views import MethodView
 from flask_jwt_extended import (
@@ -15,10 +15,17 @@ from api.schemas import (
     UserSchemas, PaginationSchema
 )
 api = APIBlueprint('users', __name__, url_prefix='/users')
+api.security_schemes = {  # equals to use config SECURITY_SCHEMES
+    'jwt': {
+        'type': 'apiKey',
+        'in': 'header',
+        'name': 'X-API-Key',
+    }
+}
 
 
 @api.route("/")
-class UserRoutes(MethodView):
+class Users(MethodView):
     @api.input(PaginationSchema, 'query')
     @api.output(UserSchemas.UsersOut)
     def get(self, query):
@@ -26,9 +33,8 @@ class UserRoutes(MethodView):
             page=query['page'],
             per_page=query['per_page']
         )
-        users = pagination.items
         return {
-            'users': users,
+            'users': pagination.itemss,
             'pagination': pagination_builder(pagination)
         }
 
@@ -49,7 +55,6 @@ class UserRoutes(MethodView):
 
 
 @api.get("/<int:id>")
-@api.input(UserSchemas.UserIn)
 @api.output(UserSchemas.UserOut)
 def get_user(id):
     return jsonify(
@@ -58,18 +63,17 @@ def get_user(id):
 
 
 @api.route("/active")
-@jwt_required()
-@api.doc(security='BearerAuth')
-class Active_User_Routes(MethodView):
+class ActiveUser(MethodView):
+    decorators = [jwt_required(), api.doc(security='jwt')]
+
     @api.output(UserSchemas.UserOut)
     def get(self):
-        return jsonify(
-            user=current_user.serialize()
-        )
+        return current_user
 
-    def put(self):
-        if current_user:
-            current_user.update(**request.get_json())
-            db.session.merge(current_user)
-            db.session.commit()
-            return jsonify(message="Success."), 200
+    @api.input(UserSchemas.UserIn)
+    @api.output(UserSchemas.UserOut)
+    def put(self, data):
+        current_user.update(**request.get_json())
+        db.session.merge(current_user)
+        db.session.commit()
+        return User.query.filter_by(id=current_user.id).first()

@@ -3,7 +3,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 from flask import jsonify
 
-from apiflask import APIBlueprint
+from apiflask import APIBlueprint, HTTPTokenAuth
 from flask_jwt_extended import create_access_token
 
 from api.models import (
@@ -20,6 +20,10 @@ import api.api_routes.locations as locations
 import api.api_routes.shop as shop
 
 api = APIBlueprint('api', __name__, url_prefix='/api')
+api.security_schemes = {
+    "jwt": HTTPTokenAuth()
+}
+
 api.register_blueprint(users.api)
 api.register_blueprint(pilots.api)
 api.register_blueprint(missions.api)

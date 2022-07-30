@@ -33,12 +33,18 @@ def get_pilot(id):
 
 
 @api.route("/")
-class UserRoutes(MethodView):
+class Pilots(MethodView):
     @api.input(PaginationSchema, 'query')
-    def get(self):
-        return jsonify(
-            pilots=[x.serialize() for x in Pilot.query.all()]
+    @api.output(PilotSchemas.PilotsOut)
+    def get(self, query):
+        pagination = Pilot.query.paginate(
+            page=query['page'],
+            per_page=query['per_page']
         )
+        return {
+            'pilots': pagination.items,
+            'pagination': pagination_builder(pagination)
+        }
 
     @api.input(PilotSchemas.PilotIn)
     @jwt_required()
