@@ -47,13 +47,18 @@ class Pilots(MethodView):
         }
 
     @api.input(PilotSchemas.PilotIn)
+    @api.output(PilotSchemas.PilotOut)
+    @api.doc(security="jwt")
     @jwt_required()
-    def post(self):
+    def post(self, data):
         user = current_user
         user.pilots.append(Pilot(
-            name=request.json.get("name", None),
-            callsign=request.json.get("callsign", None)
+            name=data.get("name", None),
+            callsign=data.get("callsign", None)
         ))
         db.session.merge(user)
         db.session.commit()
-        return jsonify(msg="Success."), 200
+        return Pilot.query.filter_by(
+            name=data.get("name", None),
+            callsign=data.get("callsign", None)
+        ).first()

@@ -1,4 +1,3 @@
-from lib2to3.pgen2 import token
 from flask_marshmallow import Marshmallow
 from marshmallow_sqlalchemy.fields import Nested
 from apiflask import Schema
@@ -40,13 +39,16 @@ class UserSchemas:
 
 
 class PilotSchemas:
-    class PilotIn(ma.Schema):
-        name = ma.String()
-        callsign = ma.String()
+
+    class PilotIn(ma.SQLAlchemyAutoSchema):
+        class Meta:
+            model = Pilot
+            load_instance = True
 
     class PilotOut(ma.SQLAlchemyAutoSchema):
         class Meta:
             model = Pilot
+            include_relationships = True
 
     class PilotsOut(ma.Schema):
         pilots = af.List(af.Nested('PilotOut'))
