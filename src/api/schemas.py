@@ -1,3 +1,4 @@
+from lib2to3.pgen2 import token
 from flask_marshmallow import Marshmallow
 from marshmallow_sqlalchemy.fields import Nested
 import apiflask.fields as af
@@ -17,15 +18,23 @@ class PaginationSchema(ma.Schema):
     per_page = af.Integer(load_default=20, validate=av.Range(max=30))
 
 
-class UserOutSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = User
-        exclude = ('_password', )
+class UserSchemas:
+    class UserIn(ma.SQLAlchemyAutoSchema):
+        class Meta:
+            model = User
+            fields = ('email', 'password')
 
+    class UserOut(ma.SQLAlchemyAutoSchema):
+        class Meta:
+            model = User
+            exclude = ('_password', )
 
-class UsersOutSchema(ma.Schema):
-    users = af.List(af.Nested(UserOutSchema))
-    pagination = af.Nested(PaginationSchema)
+    class UsersOut(ma.Schema):
+        users = af.List(af.Nested('UserOut'))
+        pagination = af.Nested(PaginationSchema)
+
+    class TokenSchema(ma.Schema):
+        token = af.String()
 
 
 class PilotSchema(ma.SQLAlchemyAutoSchema):
