@@ -4,6 +4,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 from datetime import datetime, date, time
 import random
 
+from apiflask import APIBlueprint, pagination_builder
 from flask import Flask, request, jsonify, url_for, Blueprint
 from flask_jwt_extended import (
     jwt_required, get_jwt_identity, create_access_token, current_user
@@ -14,24 +15,32 @@ from api.models import (
     Mission, Location, MissionState,
     GearType
 )
+from api.schemas import (
+    UserOutSchema, UsersOutSchema, PaginationSchema, PilotSchema, TransactionSchema, GearSchema,
+    MissionSchema, LocationSchema, MissionStateSchema,
+    GearTypeSchema
+)
 from api.utils import generate_sitemap, APIException
 
-api = Blueprint('api', __name__)
+api = APIBlueprint('api', __name__)
 
-
-def get_jwt_user():
-    return User.query.filter_by(id=get_jwt_identity()).first()
 
 # Users
 
 
-@api.route("/users", methods=['GET'])
-def get_users():
-    return jsonify(
-        users=[
-            user.serialize() for user in User.query.all()
-        ]
+@api.get("/users")
+@api.input(PaginationSchema, 'query')
+@api.output(UsersOutSchema)
+def get_users(query):
+    pagination = User.query.paginate(
+        page=query['page'],
+        per_page=query['per_page']
     )
+    users = pagination.items
+    return {
+        'users': users,
+        'pagination': pagination_builder(pagination)
+    }
 
 
 @api.route("/users/<int:id>", methods=['GET'])
