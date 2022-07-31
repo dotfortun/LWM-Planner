@@ -58,6 +58,17 @@ class PilotSchemas:
             include_relationships = True
             load_instance = True
 
+    class PilotOutShort(ma.SQLAlchemyAutoSchema):
+        class Meta:
+            model = Pilot
+            exclude = (
+                "agility",
+                "engineering",
+                "hull",
+                "manna",
+                "systems",
+            )
+
     class PilotsOut(ma.Schema):
         pilots = af.List(af.Nested('PilotOut'))
         pagination = af.Nested(PaginationSchema)
@@ -91,20 +102,50 @@ class GearSchema:
             exclude=("weight",)
 
 
-class MissionSchema:
+class MissionSchemas:
+    class MissionsOut(ma.Schema):
+        missions = af.List(af.Nested('MissionOut'))
+        pagination = af.Nested(PaginationSchema)
+
     class MissionOut(ma.SQLAlchemyAutoSchema):
+        location = ma.Nested('LocationOut')
+        loot = af.Nested('GearOut', many=True)
+        pilots = af.Nested('PilotOutShort', many=True)
+        gm = af.Nested('UserOut')
+        mission_state = ma.Nested('MissionStateOut')
+
+        class Meta:
+            model = Mission
+            include_relationships = True
+
+    class MissionIn(ma.SQLAlchemySchema):
+        name = ma.String(required=False)
+        description = ma.String(required=False)
+        difficulty = ma.Integer(required=False)
+        is_job = ma.Boolean(required=False)
+        schedule = ma.DateTime(required=False)
+        gm_id = ma.Integer(required=False)
+        location_id = ma.Integer(required=False)
+        state_id = ma.Integer(required=False)
+
         class Meta:
             model = Mission
 
+    class Join(ma.Schema):
+        pilot_id = ma.Integer()
+        mission_id = ma.Integer()
 
-class LocationSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = Location
+
+class LocationSchemas:
+    class LocationOut(ma.SQLAlchemyAutoSchema):
+        class Meta:
+            model = Location
 
 
-class MissionStateSchema(ma.SQLAlchemyAutoSchema):
+class MissionStateOut(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = MissionState
+        exclude = ("id", )
 
 
 class GearTypeSchema(ma.SQLAlchemyAutoSchema):

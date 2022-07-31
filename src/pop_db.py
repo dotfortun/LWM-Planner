@@ -5,6 +5,7 @@ from api.models import (
     Mission, Setting
 )
 import json
+import random
 
 with app.app_context():
     db_setup_done = Setting.query.filter_by(key="popdb.done").first()
@@ -89,7 +90,7 @@ with app.app_context():
 
         gear = Gear.query.all()
 
-        for item in gear:
+        for item in random.choices(gear, k=25):
             db.session.add(Transaction(
                 item=item,
                 pilot=pilot,

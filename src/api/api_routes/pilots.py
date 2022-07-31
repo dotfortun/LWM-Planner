@@ -18,10 +18,9 @@ api = APIBlueprint('pilots', __name__, url_prefix='/pilots')
 
 
 @api.route("/<int:id>", methods=['GET'])
+@api.output(PilotSchemas.PilotOut)
 def get_pilot(id):
-    return jsonify(
-        pilot=Pilot.query.filter_by(id=id).first().serialize()
-    )
+    return Pilot.query.filter_by(id=id).first()
 
 
 @api.route("/")
