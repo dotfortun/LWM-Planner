@@ -2,6 +2,7 @@ from datetime import datetime, date, time
 import random
 
 from apiflask import APIBlueprint, HTTPTokenAuth, pagination_builder
+from apiflask.schemas import EmptySchema
 from flask import request, jsonify
 from flask.views import MethodView
 from flask_jwt_extended import (
@@ -17,34 +18,35 @@ from api.schemas import (
 api = APIBlueprint('users', __name__, url_prefix='/users')
 
 
-@api.route("/")
-class Users(MethodView):
-    @api.input(PaginationSchema, 'query')
-    @api.output(UserSchemas.UsersOut)
-    def get(self, query):
-        pagination = User.query.paginate(
-            page=query['page'],
-            per_page=query['per_page']
-        )
-        return {
-            'users': pagination.itemss,
-            'pagination': pagination_builder(pagination)
-        }
+@api.get("/")
+@api.input(PaginationSchema, 'query')
+@api.output(UserSchemas.UsersOut)
+def get_users(query):
+    pagination = User.query.paginate(
+        page=query['page'],
+        per_page=query['per_page']
+    )
+    return {
+        'users': pagination.items,
+        'pagination': pagination_builder(pagination)
+    }
 
-    @api.input(UserSchemas.UserIn)
-    def post(self):
-        if not request.json.get("email", None):
-            return jsonify(message="Missing email"), 400
-        if not request.json.get("password", None):
-            return jsonify(message="Missing password"), 400
-        if User.query.filter_by(email=request.json.get("email", "")).first():
-            return jsonify(message="User already exists."), 400
-        db.session.add(User(
-            email=request.json.get("email"),
-            password=request.json.get("password"),
-        ))
-        db.session.commit()
-        return jsonify(message="User created successfully."), 200
+
+@api.post("/")
+@api.input(UserSchemas.UserIn, 'query')
+@api.output(EmptySchema)
+def post_user(query):
+    if not query.get("email", None):
+        return jsonify(message="Missing email"), 400
+    if not query.get("password", None):
+        return jsonify(message="Missing password"), 400
+    if User.query.filter_by(email=query.get("email", "")).first():
+        return jsonify(message="User already exists."), 400
+    db.session.add(User(
+        email=query.get("email"),
+        password=query.get("password"),
+    ))
+    db.session.commit()
 
 
 @api.get("/<int:id>")
@@ -63,7 +65,7 @@ class ActiveUser(MethodView):
     def get(self):
         return current_user
 
-    @api.input(UserSchemas.UserIn)
+    @api.input(UserSchemas.UserUpdate)
     @api.output(UserSchemas.UserOut)
     def put(self, data):
         current_user.update(**request.get_json())

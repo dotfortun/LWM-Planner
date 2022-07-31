@@ -2,6 +2,7 @@ from datetime import datetime, date, time
 import random
 
 from apiflask import APIBlueprint, pagination_builder
+from apiflask.schemas import EmptySchema
 from flask import request, jsonify
 from flask.views import MethodView
 from flask_jwt_extended import (
@@ -38,18 +39,11 @@ class Pilots(MethodView):
         }
 
     @api.input(PilotSchemas.PilotIn)
-    @api.output(PilotSchemas.PilotOut)
+    @api.output(EmptySchema)
     @api.doc(security="jwt")
     @jwt_required()
-    def post(self, data):
-        user = current_user
-        user.pilots.append(Pilot(
-            name=data.get("name", None),
-            callsign=data.get("callsign", None)
-        ))
-        db.session.merge(user)
+    def post(self, query):
+        print(query)
+        current_user.pilots.append(Pilot(**query))
+        db.session.merge(current_user)
         db.session.commit()
-        return Pilot.query.filter_by(
-            name=data.get("name", None),
-            callsign=data.get("callsign", None)
-        ).first()

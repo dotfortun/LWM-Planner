@@ -27,28 +27,7 @@ class SingleMission(MethodView):
 
     @api.input(MissionSchemas.MissionIn)
     @api.output(EmptySchema)
-    @api.doc(summary="Post Mission")
-    @api.doc(security="jwt")
-    @jwt_required()
-    def post(self):
-        req = request.get_json()
-        if "is_job" in req.keys() and not current_user.is_admin:
-            req["is_job"] = True
-        mission = Mission(
-            name=req.get("name", None),
-            description=req.get("description", None),
-            difficulty=req.get("difficulty", 1),
-            is_job=req.get("is_job", False),
-            location=Location.query.filter_by(
-                name=req.get("location", "")).first
-        )
-        db.session.merge(mission)
-        db.session.commit()
-
-    @api.input(MissionSchemas.MissionIn)
-    @api.output(EmptySchema)
-    @api.doc(summary="Put Mission")
-    @api.doc(security="jwt")
+    @api.doc(summary="Put Mission", security="jwt")
     @jwt_required()
     def put(self):
         if current_user.is_admin:
@@ -59,6 +38,27 @@ class SingleMission(MethodView):
             db.session.commit()
             return jsonify(message="Success."), 200
         return jsonify("Admin Privileges Needed."), 401
+
+
+@api.post("/")
+@api.input(MissionSchemas.MissionIn)
+@api.output(EmptySchema)
+@api.doc(summary="Post Mission", security="jwt")
+@jwt_required()
+def post(self):
+    req = request.get_json()
+    if "is_job" in req.keys() and not current_user.is_admin:
+        req["is_job"] = True
+    mission = Mission(
+        name=req.get("name", None),
+        description=req.get("description", None),
+        difficulty=req.get("difficulty", 1),
+        is_job=req.get("is_job", False),
+        location=Location.query.filter_by(
+            name=req.get("location", "")).first
+    )
+    db.session.merge(mission)
+    db.session.commit()
 
 
 @api.get("/")

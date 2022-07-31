@@ -24,7 +24,15 @@ class PaginationSchema(ma.Schema):
 
 class UserSchemas:
     class UserIn(ma.SQLAlchemyAutoSchema):
-        password = af.String()
+        email = af.String(required=True)
+        password = af.String(required=True)
+        class Meta:
+            model = User
+            fields = ('email', 'password')
+
+    class UserUpdate(ma.SQLAlchemyAutoSchema):
+        email = af.String(required=False)
+        password = af.String(required=False)
         class Meta:
             model = User
             fields = ('email', 'password')
@@ -42,10 +50,17 @@ class UserSchemas:
 
 class PilotSchemas:
 
-    class PilotIn(ma.SQLAlchemyAutoSchema):
+    class PilotIn(ma.SQLAlchemySchema):
+        name = ma.String(required=False)
+        callsign = ma.String(required=False)
+        hull = ma.Integer(required=False)
+        agility = ma.Integer(required=False)
+        systems = ma.Integer(required=False)
+        engineering = ma.Integer(required=False)
+        manna = ma.Integer(required=False)
+
         class Meta:
             model = Pilot
-            load_instance = True
 
     class PilotOut(ma.SQLAlchemyAutoSchema):
         user = af.Nested('UserOut')
@@ -137,9 +152,25 @@ class MissionSchemas:
 
 
 class LocationSchemas:
+    class LocationsOut(ma.Schema):
+        locations = af.List(af.Nested('LocationOut'))
+        pagination = af.Nested(PaginationSchema)
+
     class LocationOut(ma.SQLAlchemyAutoSchema):
         class Meta:
             model = Location
+    
+    class LocationIn(ma.SQLAlchemySchema):
+        name = ma.String(required=False)
+        description = ma.String(required=False)
+
+        class Meta:
+            model = Location
+
+    class RelateIn(ma.Schema):
+        parent = ma.Integer()
+        child = ma.Integer()
+
 
 
 class MissionStateOut(ma.SQLAlchemyAutoSchema):
@@ -151,8 +182,10 @@ class MissionStateOut(ma.SQLAlchemyAutoSchema):
 class GearTypeSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = GearType
+        exclude = ("id", )
 
 
 class SettingSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Setting
+        exclude = ("id", )
