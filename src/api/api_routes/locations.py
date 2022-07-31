@@ -34,13 +34,6 @@ def get_location(id):
 @api.route("/", methods=['POST'])
 @jwt_required()
 def post_location():
-    """
-    {
-        "name": <str>,
-        "description": <str>,
-        "parent": <str>
-    }
-    """
     parent = Location.query.filter_by(
         name=request.json.get("parent", "")).first()
     loc = Location(
