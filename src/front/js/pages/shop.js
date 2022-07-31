@@ -15,7 +15,7 @@ const ShopCard = ({ item }) => {
       </Card.Header>
       <Card.Body>
         <Row>
-          <p>{item.description}</p>
+          <p dangerouslySetInnerHTML={{ __html: item.description }}></p>
         </Row>
       </Card.Body>
     </Card>
