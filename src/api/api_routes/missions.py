@@ -75,15 +75,15 @@ def get_missions(query):
     }
 
 
-@api.route("/join", methods=['POST'])
+@api.post("/join")
 @api.input(MissionSchemas.Join)
 @api.output(EmptySchema)
 @api.doc(security="jwt")
 @jwt_required()
-def join_mission():
+def join_mission(query):
     req = request.get_json()
-    pilot = Pilot.query.filter_by(id=req.get("pilot", None)).first()
-    mission = Mission.query.filter_by(id=req.get("mission", None)).first()
+    pilot = Pilot.query.filter_by(id=query.get("pilot_id", None)).first()
+    mission = Mission.query.filter_by(id=query.get("mission_id", None)).first()
     if pilot in current_user.pilots:
         if req.get("action", "join") == "join":
             mission.pilots.append(pilot)
@@ -94,4 +94,3 @@ def join_mission():
             ))
     db.session.merge(mission)
     db.session.commit()
-    return jsonify(msg="Success."), 200
