@@ -10,7 +10,7 @@ from api.models import (
     db, User
 )
 from api.schemas import (
-    UserSchemas
+    UserSchemas, TokenSchema
 )
 
 import api.api_routes.users as users
@@ -33,7 +33,7 @@ api.register_blueprint(shop.api)
 
 @api.route('/login', methods=['POST'])
 @api.input(UserSchemas.UserIn)
-@api.output(UserSchemas.TokenSchema)
+@api.output(TokenSchema)
 def login(data):
     user = User.query.filter_by(
         email=data.get("email", "")).first()

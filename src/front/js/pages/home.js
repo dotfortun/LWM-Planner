@@ -40,7 +40,7 @@ export const Home = () => {
     <Container fluid>
       <Row>
         <Col xs={12}>
-          <Header title="Test Header" />
+          <Header title="Available Missions" />
         </Col>
       </Row>
       <Row>

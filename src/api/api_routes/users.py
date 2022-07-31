@@ -9,19 +9,12 @@ from flask_jwt_extended import (
 )
 
 from api.models import (
-    db, User
+    db, User, Pilot
 )
 from api.schemas import (
-    UserSchemas, PaginationSchema
+    UserSchemas, PaginationSchema, GearSchema, PilotSchemas
 )
 api = APIBlueprint('users', __name__, url_prefix='/users')
-api.security_schemes = {  # equals to use config SECURITY_SCHEMES
-    'jwt': {
-        'type': 'apiKey',
-        'in': 'header',
-        'name': 'X-API-Key',
-    }
-}
 
 
 @api.route("/")
@@ -77,3 +70,22 @@ class ActiveUser(MethodView):
         db.session.merge(current_user)
         db.session.commit()
         return User.query.filter_by(id=current_user.id).first()
+
+    @api.get("/pilots")
+    @api.output(PilotSchemas.PilotsOut)
+    @api.doc(security='jwt')
+    @jwt_required()
+    def get_active_user_pilots():
+        return jsonify(
+            pilots=[x.serialize() for x in current_user.pilots]
+        )
+
+    @api.get("/pilots/<int:pilotid>")
+    @api.output(PilotSchemas.PilotOut)
+    @api.doc(security='jwt')
+    @jwt_required()
+    def get_active_user_pilot(pilot_id):
+        return Pilot.query.filter_by(
+            user=current_user,
+            id=pilot_id
+        ).first()

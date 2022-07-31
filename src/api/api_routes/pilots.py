@@ -17,14 +17,6 @@ from api.schemas import (
 api = APIBlueprint('pilots', __name__, url_prefix='/pilots')
 
 
-@api.route("/active", methods=['GET'])
-@jwt_required()
-def get_active_user_pilots():
-    return jsonify(
-        pilots=[x.serialize() for x in current_user.pilots]
-    )
-
-
 @api.route("/<int:id>", methods=['GET'])
 def get_pilot(id):
     return jsonify(

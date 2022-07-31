@@ -12,7 +12,7 @@ from api.models import (
     db, GearType, Pilot, Transaction, Gear
 )
 from api.schemas import (
-    UserSchemas, PaginationSchema
+    InvSchema, PaginationSchema
 )
 api = APIBlueprint('shop', __name__, url_prefix='/shop')
 
@@ -48,12 +48,6 @@ def get_store():
 @api.route("/purchase", methods=['POST'])
 @jwt_required()
 def make_purchase():
-    """
-    {
-        "pilot_id": <int: pilot id>,
-        "item_id": <int: item id>
-    }
-    """
     pilot = Pilot.query.filter_by(id=request.get_json()["pilot_id"]).first()
     item = Gear.query.filter_by(id=request.get_json()["item_id"]).first()
     pilot.transactions.append(

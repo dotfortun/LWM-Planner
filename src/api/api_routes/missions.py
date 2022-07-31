@@ -34,15 +34,6 @@ def get_mission(id):
 @api.route("/", methods=['POST'])
 @jwt_required()
 def post_mission():
-    """
-    {
-        "name": <str>,
-        "description": <str>,
-        "difficulty": <int>,
-        "is_job?": <bool>,
-        "location": <str>
-    }
-    """
     req = request.get_json()
     if "is_job" in req.keys() and not current_user.is_admin:
         req["is_job"] = True
@@ -62,16 +53,6 @@ def post_mission():
 @api.route("/", methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_mission():
-    """
-    {
-        "id": <int>,
-        "name": <str>,
-        "description": <str>,
-        "difficulty": <int>,
-        "is_job": <bool>,
-        "location": <str>
-    }
-    """
     if current_user.is_admin:
         req = request.get_json()
         mission = Mission.query.filter_by(
@@ -86,13 +67,6 @@ def update_mission():
 @api.route("/join", methods=['POST'])
 @jwt_required()
 def post_join_mission():
-    """
-    {
-        "pilot": <int: pilot_id>,
-        "mission": <int: mission_id>,
-        "action": <str: action? ['join', 'leave']>
-    }
-    """
     req = request.get_json()
     pilot = Pilot.query.filter_by(id=req.get("pilot", None)).first()
     mission = Mission.query.filter_by(id=req.get("mission", None)).first()
