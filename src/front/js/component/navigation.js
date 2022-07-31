@@ -35,16 +35,18 @@ export const Navigation = () => {
                 </NavDropdown.Item>
               </NavDropdown>
             ) : null}
-            <NavDropdown
-              title="Login"
-              menuVariant="dark"
-              align="end"
-              autoClose="outside"
-            >
-              <NavDropdown.Item>
-                <LoginForm nav_to={loc} />
-              </NavDropdown.Item>
-            </NavDropdown>
+            {!store.user_token ? (
+              <NavDropdown
+                title="Login"
+                menuVariant="dark"
+                align="end"
+                autoClose="outside"
+              >
+                <NavDropdown.Item>
+                  <LoginForm nav_to={loc} />
+                </NavDropdown.Item>
+              </NavDropdown>
+            ) : null}
           </Nav>
         </Navbar.Collapse>
       </Container>

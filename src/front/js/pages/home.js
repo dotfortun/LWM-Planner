@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 
 import { Context } from "../store/appContext";
@@ -10,31 +10,13 @@ import { MissionCard } from "../component/mission";
 
 export const Home = () => {
   const { store, actions } = useContext(Context);
+  const [render, rerender] = useState(false);
 
-  let mission = {
-    description:
-      "Lets shoot some doods and get some loots.  Yes, you can bring your draek.",
-    difficulty: 1,
-    is_job: true,
-    location: {
-      description: "",
-      name: "Yomi Gate",
-      parent: "Izanagi",
-    },
-    loot: [],
-    mission_state: {
-      name: "Open",
-      value: "OPEN",
-    },
-    name: "Gate Camp On Yomi Gate",
-    pilots: [
-      {
-        id: 1,
-        pilot: "Test McTestington",
-      },
-    ],
-    scheduled_date: "Sat, 06 Aug 2022 17:00:00 GMT",
-  };
+  useEffect(() => {
+    actions.getMissions().then(() => {
+      actions.rehydrate();
+    });
+  }, []);
 
   return (
     <Container fluid>
@@ -45,7 +27,9 @@ export const Home = () => {
       </Row>
       <Row>
         <Col sm={{ span: 8, offset: 2 }}>
-          <MissionCard mission={mission} />
+          {store.missions?.map((elem, idx) => {
+            return <MissionCard mission={elem} key={idx} />;
+          })}
         </Col>
       </Row>
     </Container>
