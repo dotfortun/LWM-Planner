@@ -17,8 +17,8 @@ from api.schemas import (
 api = APIBlueprint('shop', __name__, url_prefix='/shop')
 
 
-@api.route('/', methods=['GET'])
-def get_store():
+@api.get('')
+def get_shop():
     seed = int(datetime.combine(date.today(), time(0, 0, 0)).timestamp())
     categories = GearType.query.filter(GearType.value.in_([
         "FRAME", "SYSTEM", "WEAPON", "MOD"

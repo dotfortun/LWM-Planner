@@ -17,3 +17,46 @@ html {
 nav a {
   text-decoration: none;
 }
+
+@keyframes distort-subtle {
+  25% {
+    text-shadow: none;
+  }
+  26% {
+    text-shadow: 2px -1px #ff0000, -2px 3px #00ffff;
+  }
+  27% {
+    text-shadow: -2px -3px #ff0000, 2px 1px #00ffff;
+  }
+  28% {
+    text-shadow: 2px 1px #ff0000, -4px 1px #00ffff;
+  }
+  29% {
+    text-shadow: -4px 1px #ff0000, -2px -1px #00ffff;
+  }
+  30% {
+    text-shadow: none;
+  }
+  75% {
+    text-shadow: none;
+  }
+  76% {
+    text-shadow: -4px 1px #ff0000, -2px -1px #00ffff;
+  }
+  77% {
+    text-shadow: -2px -3px #ff0000, 2px 1px #00ffff;
+  }
+  78% {
+    text-shadow: 2px -1px #ff0000, -2px 3px #00ffff;
+  }
+  79% {
+    text-shadow: 2px 1px #ff0000, -4px 1px #00ffff;
+  }
+  80% {
+    text-shadow: none;
+  }
+}
+
+.horus--subtle {
+  animation: distort-subtle 5s infinite;
+}
