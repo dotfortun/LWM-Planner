@@ -18,7 +18,7 @@ from api.schemas import (
 api = APIBlueprint('users', __name__, url_prefix='/users')
 
 
-@api.get("/")
+@api.get("")
 @api.input(PaginationSchema, 'query')
 @api.output(UserSchemas.UsersOut)
 def get_users(query):
@@ -32,7 +32,7 @@ def get_users(query):
     }
 
 
-@api.post("/")
+@api.post("")
 @api.input(UserSchemas.UserIn, 'query')
 @api.output(EmptySchema)
 def post_user(query):

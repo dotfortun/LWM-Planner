@@ -51,7 +51,7 @@ def post(data):
 @api.output(EmptySchema)
 @api.doc(security="jwt")
 @jwt_required()
-def add_child(data):
+def add_relation(data):
     parent = Location.query(id=data.parent).first()
     child = Location.query(id=data.child).first()
     child.parent = parent
