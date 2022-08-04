@@ -21,7 +21,7 @@ from api.commands import setup_commands
 ENV = os.getenv("FLASK_ENV")
 static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../public/')
-app = APIFlask(__name__, docs_path='/', docs_ui='rapidoc')
+app = APIFlask(__name__, docs_path='/api', docs_ui='rapidoc')
 app.config['RAPIDOC_THEME'] = 'dark'
 app.security_schemes = {
     'jwt': {
@@ -89,13 +89,11 @@ def handle_invalid_usage(error):
 # generate sitemap with all your endpoints
 
 
-# @app.route('/')
-# def sitemap():
-#     if ENV == "development":
-#         return generate_sitemap(app)
-#     return send_from_directory(static_file_dir, 'index.html')
-
-# any other endpoint will try to serve it like a static file
+@app.route('/')
+def sitemap():
+    if ENV == "development":
+        return generate_sitemap(app)
+    return send_from_directory(static_file_dir, 'index.html')
 
 
 @app.route('/<path:path>', methods=['GET'])

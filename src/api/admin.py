@@ -52,10 +52,8 @@ class MissionView(ModelView):
         'location',
         'loot',
         'pilots',
+        'schedule'
     ]
-    form_extra_fields = {
-        'schedule': DateTimeField('schedule')
-    }
 
 
 class MissionStateView(ModelView):
