@@ -139,10 +139,6 @@ const getState = ({ getStore, getActions, setStore }) => {
             return resp;
           })
           .then((resp) => resp.json())
-          .then((data) => {
-            console.log(data);
-            return data;
-          })
           .then((data) => setStore({ missions: data.missions }))
           .then(() => getActions().dehydrate());
       },
