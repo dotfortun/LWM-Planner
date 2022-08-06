@@ -21,8 +21,10 @@ export const Home = () => {
         return <MissionCard mission={elem} key={idx} />;
       });
       setMissions(misioncards);
-      console.log(store);
     });
+    if (store.user_token) {
+      actions.getActivePilots();
+    }
   }, []);
 
   return (

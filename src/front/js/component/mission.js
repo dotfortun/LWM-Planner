@@ -1,37 +1,114 @@
-import React, { useReducer, useContext, useEffect } from "react";
+import React, { useReducer, useContext, useEffect, useState } from "react";
 import { Button, Card, Col, Form, Placeholder, Row } from "react-bootstrap";
 
 import { Context } from "../store/appContext";
 
-const reducer = (state, action) => {
-  console.log("Current state:", state);
-  switch (action.type) {
-    case "set_mission_state":
-      console.log(state);
-      return state;
-    case "get_mission_name":
-      if (state?.mission?.name) {
-        return { name: state.mission.name };
-      } else {
-        return <Placeholder xs={6} size="lg" />;
-      }
+const MissionPlaceholder = () => {
+  const { store } = useContext(Context);
+
+  return (
+    <Card className="bg-secondary mb-3">
+      <Card.Header>
+        <h3>
+          <Placeholder xs={6} size="lg" />
+        </h3>
+        <h4>
+          Location: <Placeholder xs={6} size="md" />
+        </h4>
+        <h6>
+          DIFFICULTY: <Placeholder xs={4} size="lg" />
+        </h6>
+      </Card.Header>
+      <Card.Body>
+        <Row>
+          <Col>
+            <p>
+              <Placeholder xs={12} size="sm" />
+              <Placeholder xs={12} size="sm" />
+              <Placeholder xs={12} size="sm" />
+              <Placeholder xs={12} size="sm" />
+            </p>
+          </Col>
+          <Col>
+            <ul className="pilot_prop_stack">
+              <li>
+                <strong>Participating:</strong>
+              </li>
+              <li>
+                <Placeholder xs={12} size="sm" />
+              </li>
+              <li>
+                <Placeholder xs={12} size="sm" />
+              </li>
+              <li>
+                <Placeholder xs={12} size="sm" />
+              </li>
+            </ul>
+          </Col>
+        </Row>
+      </Card.Body>
+    </Card>
+  );
+};
+
+const Participating = ({ pilots }) => {
+  return (
+    <ul className="pilot_prop_stack">
+      <li>
+        <strong>Participating:</strong>
+      </li>
+      {pilots?.map((elem, idx) => (
+        <li key={idx}>
+          {elem.name} - <em>"{elem.callsign}"</em>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+const MissionCardButtons = ({ mission_state }) => {
+  const { store } = useContext(Context);
+
+  switch (mission_state?.value) {
+    case "OPEN":
+      return (
+        <Col className="d-flex justify-content-evenly">
+          <Form.Select style={{ width: "calc(100%/3)" }}>
+            <option defaultValue={true}>Select Pilot</option>
+            {store?.pilots?.map((elem, idx) => {
+              return <option key={idx}>{elem.name}</option>;
+            })}
+          </Form.Select>
+          <Button>Join Mission</Button>
+        </Col>
+      );
+    case "PLANNING":
+    case "DELAYED":
+      return (
+        <Col className="d-flex justify-content-evenly">
+          <Button variant="danger">Leave Mission</Button>
+        </Col>
+      );
     default:
-      throw new Error();
+      return <></>;
   }
 };
 
 export const MissionCard = ({ mission }) => {
   const { store } = useContext(Context);
-  const [state, dispatch] = useReducer(reducer, {});
 
   useEffect(() => {
-    dispatch({ type: "set_mission_state" });
-  }, [mission]);
+    console.log(mission);
+  }, []);
+
+  if (!mission) {
+    return <MissionPlaceholder />;
+  }
 
   return (
     <Card className="bg-secondary mb-3">
       <Card.Header>
-        <h3>{state.name}</h3>
+        <h3>{mission?.name}</h3>
         <h4>Location: {mission?.location?.name}</h4>
         <h6>
           DIFFICULTY:{" "}
@@ -43,15 +120,10 @@ export const MissionCard = ({ mission }) => {
       <Card.Body>
         <Row>
           <Col>
-            <p>{null}</p>
+            <p>{mission?.description}</p>
           </Col>
           <Col>
-            <ul className="pilot_prop_stack">
-              <li>
-                <strong>Participating:</strong>
-              </li>
-              {null}
-            </ul>
+            <Participating pilots={mission?.pilots} />
           </Col>
         </Row>
       </Card.Body>
@@ -60,7 +132,7 @@ export const MissionCard = ({ mission }) => {
           display: !!store.user_token ? "block" : "none",
         }}
       >
-        <Col className="d-flex justify-content-evenly">{null}</Col>
+        <MissionCardButtons mission_state={mission?.mission_state} />
       </Card.Footer>
     </Card>
   );
