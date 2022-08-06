@@ -144,7 +144,8 @@ with app.app_context():
         with open("./src/data/missions.json", "rt") as missionfile:
             missions = json.loads(missionfile.read())
             for mission in missions:
-                db.session.merge(MissionSchemas.MissionIn().load(mission))
+                m_json = MissionSchemas.MissionIn().load(mission)
+                db.session.merge(Mission(**m_json))
             db.session.commit()
 
         popdb = Setting(

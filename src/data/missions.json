@@ -54,7 +54,7 @@
     "description": "This mission is an abject failure.  Maybe the players chose a mission that was too hard, or maybe they just didn't get there in time.",
     "difficulty": 6,
     "schedule": "2022-08-04T13:09:08",
-    "gm_id": null,
+    "gm_id": 1,
     "location_id": 7,
     "name": "No objectives were completed, the mission is a wash.",
     "state_id": 6
@@ -64,7 +64,7 @@
     "description": "Some objectives were met, but not all of them.",
     "difficulty": 3,
     "schedule": "2022-08-04T13:09:08",
-    "gm_id": null,
+    "gm_id": 1,
     "location_id": 10,
     "name": "Partial Success",
     "state_id": 7
@@ -74,7 +74,7 @@
     "description": "The players completed all objectives.  Hooray for competence!",
     "difficulty": 6,
     "schedule": "2022-08-04T13:09:08",
-    "gm_id": null,
+    "gm_id": 1,
     "location_id": 13,
     "name": "Woo!",
     "state_id": 8
@@ -85,7 +85,7 @@
     "difficulty": 1,
     "schedule": "2022-08-04T13:09:08",
     "gm_id": 1,
-    "location_id": null,
+    "location_id": 1,
     "name": "This expedition is complete.",
     "state_id": 9
   }
