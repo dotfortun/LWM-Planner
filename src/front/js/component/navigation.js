@@ -34,8 +34,7 @@ export const Navigation = () => {
                   <span>Pilots</span>
                 </NavDropdown.Item>
               </NavDropdown>
-            ) : null}
-            {!store.user_token ? (
+            ) : (
               <NavDropdown
                 title="Login"
                 menuVariant="dark"
@@ -46,7 +45,7 @@ export const Navigation = () => {
                   <LoginForm nav_to={loc} />
                 </NavDropdown.Item>
               </NavDropdown>
-            ) : null}
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
