@@ -4,7 +4,9 @@ from api.models import (
     GearType, Gear, Transaction, Pilot,
     Mission, Setting
 )
+from api.schemas import MissionSchemas
 import json
+import random
 
 with app.app_context():
     db_setup_done = Setting.query.filter_by(key="popdb.done").first()
@@ -89,7 +91,7 @@ with app.app_context():
 
         gear = Gear.query.all()
 
-        for item in gear:
+        for item in random.choices(gear, k=25):
             db.session.add(Transaction(
                 item=item,
                 pilot=pilot,
@@ -138,6 +140,14 @@ with app.app_context():
                     name=json_loc["parent"]).first()
                 db.session.merge(db_location)
             db.session.commit()
+        
+        with open("./src/data/missions.json", "rt") as missionfile:
+            missions = json.loads(missionfile.read())
+            for mission in missions:
+                m_json = MissionSchemas.MissionIn().load(mission)
+                db.session.merge(Mission(**m_json))
+            db.session.commit()
+
         popdb = Setting(
             key="popdb.done",
             setting=True

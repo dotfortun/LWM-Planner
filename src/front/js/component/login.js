@@ -15,11 +15,15 @@ export const LoginForm = ({ nav_to }) => {
     actions
       .login(email.current.value, pass.current.value)
       .then(() => {
-        if (nav_to) {
-          navigate(nav_to);
-        } else {
-          navigate(-1);
-        }
+        store.getActiveUser().then(() => {
+          store.getActivePilots().then(() => {
+            if (nav_to) {
+              navigate(nav_to);
+            } else {
+              navigate(-1);
+            }
+          });
+        });
       })
       .catch(() => showAlert(true));
   };

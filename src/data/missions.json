@@ -1,0 +1,92 @@
+[
+  {
+    "is_job": true,
+    "description": "This mission has no set schedule yet.",
+    "difficulty": 1,
+    "schedule": "2022-08-04T13:09:08",
+    "gm_id": 1,
+    "location_id": 1,
+    "name": "Mission in unplanned open state",
+    "state_id": 1
+  },
+  {
+    "is_job": true,
+    "description": "This mission has participants, and is being scheduled.",
+    "difficulty": 2,
+    "schedule": "2022-08-04T13:09:08",
+    "gm_id": 1,
+    "location_id": 2,
+    "name": "This mission is in the planning state.",
+    "state_id": 2
+  },
+  {
+    "is_job": true,
+    "description": "This state is intermediary, it should ideally have stuff that happens when it is transitioning to this state.",
+    "difficulty": 3,
+    "schedule": "2022-08-10T13:09:08",
+    "gm_id": 1,
+    "location_id": 3,
+    "name": "This mission is currently running.",
+    "state_id": 3
+  },
+  {
+    "is_job": true,
+    "description": "Something came up and the mission session got cancelled.  :(",
+    "difficulty": 5,
+    "schedule": "2022-08-04T13:09:08",
+    "gm_id": 1,
+    "location_id": 5,
+    "name": "This mission has been cancelled.",
+    "state_id": 4
+  },
+  {
+    "is_job": true,
+    "description": "Scheduling got in the way, but not so in the way that the whole thing is cancelled.",
+    "difficulty": 4,
+    "schedule": "2022-08-04T13:09:08",
+    "gm_id": 1,
+    "location_id": 6,
+    "name": "This mission has been delayed or rescheduled.",
+    "state_id": 5
+  },
+  {
+    "is_job": true,
+    "description": "This mission is an abject failure.  Maybe the players chose a mission that was too hard, or maybe they just didn't get there in time.",
+    "difficulty": 6,
+    "schedule": "2022-08-04T13:09:08",
+    "gm_id": 1,
+    "location_id": 7,
+    "name": "No objectives were completed, the mission is a wash.",
+    "state_id": 6
+  },
+  {
+    "is_job": true,
+    "description": "Some objectives were met, but not all of them.",
+    "difficulty": 3,
+    "schedule": "2022-08-04T13:09:08",
+    "gm_id": 1,
+    "location_id": 10,
+    "name": "Partial Success",
+    "state_id": 7
+  },
+  {
+    "is_job": true,
+    "description": "The players completed all objectives.  Hooray for competence!",
+    "difficulty": 6,
+    "schedule": "2022-08-04T13:09:08",
+    "gm_id": 1,
+    "location_id": 13,
+    "name": "Woo!",
+    "state_id": 8
+  },
+  {
+    "is_job": false,
+    "description": "Expeditions don't come from NPCs, they are planned by players.  As such, their rewards come from any artefacts looted by the players, and they cost manna to embark on to pay for ingress and extraction.",
+    "difficulty": 1,
+    "schedule": "2022-08-04T13:09:08",
+    "gm_id": 1,
+    "location_id": 1,
+    "name": "This expedition is complete.",
+    "state_id": 9
+  }
+]

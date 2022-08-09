@@ -303,7 +303,7 @@ class Mission(db.Model):
     description = db.Column(db.Text, nullable=True)
     difficulty = db.Column(db.Integer, default=1)
     is_job = db.Column(db.Boolean, default=True)
-    schedule = db.Column(db.DateTime, default=datetime.now())
+    schedule = db.Column(db.DateTime(), default=datetime.now())
     state_id = db.Column(db.Integer, db.ForeignKey(
         "mission_state.id"), nullable=True)
     location_id = db.Column(

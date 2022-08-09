@@ -4,6 +4,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       user_token: null,
       user: {},
       pilots: [],
+      missions: [],
       shop: {
         frame: [],
         weapon: [],
@@ -66,9 +67,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             return resp;
           })
           .then((resp) => resp.json())
-          .then((data) =>
-            setStore({ user: data?.user, pilots: data?.user?.pilots })
-          )
+          .then((data) => setStore({ user: data }))
           .then(() => getActions().dehydrate());
       },
 
@@ -88,7 +87,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
       getActivePilots: () => {
         const opts = getActions().getAuthOptions("GET");
-        return fetch(process.env.BACKEND_URL + "/api/pilots/active", opts)
+        return fetch(process.env.BACKEND_URL + "/api/users/pilots", opts)
           .then((resp) => {
             if (!resp.ok) {
               throw Error("Invalid login");
@@ -96,8 +95,13 @@ const getState = ({ getStore, getActions, setStore }) => {
             return resp;
           })
           .then((resp) => resp.json())
+          .then((resp) => {
+            console.log(resp);
+            return resp;
+          })
           .then((data) => setStore({ pilots: data?.pilots }))
-          .then(() => getActions().dehydrate());
+          .then(() => getActions().dehydrate())
+          .catch((err) => console.log(err));
       },
 
       getShop: () => {
@@ -118,6 +122,27 @@ const getState = ({ getStore, getActions, setStore }) => {
           .then(() => getActions().dehydrate());
       },
 
+      getMissions: (page = 1, per_page = 20) => {
+        const params = new URLSearchParams({
+          page: page,
+          per_page: per_page,
+        });
+        const opts = getActions().getAuthOptions("GET");
+        return fetch(
+          [process.env.BACKEND_URL, "/api/missions", "/?" + params].join(""),
+          opts
+        )
+          .then((resp) => {
+            if (!resp.ok) {
+              throw Error("Invalid login");
+            }
+            return resp;
+          })
+          .then((resp) => resp.json())
+          .then((data) => setStore({ missions: data.missions }))
+          .then(() => getActions().dehydrate());
+      },
+
       dehydrate: () => {
         for (const key in getStore()) {
           sessionStorage.setItem(key, JSON.stringify(getStore()[key]));
@@ -130,6 +155,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           update[key] = JSON.parse(sessionStorage.getItem(key));
           setStore(update);
         }
+        return new Promise((resp) => resp);
       },
     },
   };

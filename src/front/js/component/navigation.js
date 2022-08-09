@@ -34,17 +34,18 @@ export const Navigation = () => {
                   <span>Pilots</span>
                 </NavDropdown.Item>
               </NavDropdown>
-            ) : null}
-            <NavDropdown
-              title="Login"
-              menuVariant="dark"
-              align="end"
-              autoClose="outside"
-            >
-              <NavDropdown.Item>
-                <LoginForm nav_to={loc} />
-              </NavDropdown.Item>
-            </NavDropdown>
+            ) : (
+              <NavDropdown
+                title="Login"
+                menuVariant="dark"
+                align="end"
+                autoClose="outside"
+              >
+                <NavDropdown.Item>
+                  <LoginForm nav_to={loc} />
+                </NavDropdown.Item>
+              </NavDropdown>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

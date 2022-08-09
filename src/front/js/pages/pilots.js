@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 
 import { Context } from "../store/appContext";
@@ -31,7 +31,7 @@ const PilotCard = ({ pilot }) => {
                 <hr />
               </li>
               {pilot.frames.map((elem, idx) => (
-                <li>{elem.name}</li>
+                <li key={idx}>{elem.name}</li>
               ))}
             </ul>
           </Col>
@@ -59,7 +59,7 @@ export const PilotPage = () => {
 
   useEffect(() => {
     actions.rehydrate();
-    actions.getActiveUser();
+    actions.getActivePilots();
   }, []);
 
   return (
