@@ -17,3 +17,7 @@ html {
 nav a {
   text-decoration: none;
 }
+
+footer small {
+  font-weight: 900;
+}
